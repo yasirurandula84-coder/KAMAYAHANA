@@ -4,26 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>කාම යහන - AI Premium Tube</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 1. GENERAL & BACKGROUND STYLING */
         body { 
             background-color: #060608; 
             color: #ffffff; 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             overflow-x: hidden; 
         }
-
-        /* 2. PRELOADER SCREEN */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #050507; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
         .loader-circle { width: 100px; height: 100px; border: 4px solid #1a1a24; border-top: 4px solid #ffaa00; border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 20px rgba(255, 170, 0, 0.2); }
         .loader-text { margin-top: 20px; font-size: 24px; font-weight: bold; color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.5); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* 3. 18+ AGE GATE WITH BLUR */
         #age-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 5, 7, 0.85); z-index: 9998; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
         .age-gate-box { background: linear-gradient(135deg, #14141f 0%, #0d0d14 100%); border: 2px solid #ffaa00; padding: 40px; border-radius: 16px; text-align: center; box-shadow: 0 0 40px rgba(255, 170, 0, 0.3); max-width: 450px; width: 90%; }
         .age-gate-box h2 { color: #ffaa00; font-weight: bold; margin-bottom: 15px; }
@@ -32,23 +26,19 @@
         .btn-exit { background-color: transparent; color: #ff3333; font-weight: bold; padding: 12px 30px; border-radius: 8px; border: 2px solid #ff3333; transition: 0.3s; }
         .btn-exit:hover { background-color: #ff3333; color: #fff; box-shadow: 0 0 15px #ff3333; }
         
-        /* 4. NAVBAR & PREMIUM BRAND */
         .navbar { background: rgba(13, 13, 20, 0.8) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 170, 0, 0.2); }
         .navbar-brand { font-weight: 900; letter-spacing: 1px; font-size: 26px; }
         .brand-premium { background: linear-gradient(90deg, #ff9900, #ffcc00); color: #000000; padding: 3px 10px; border-radius: 6px; margin-left: 6px; box-shadow: 0 0 15px rgba(255, 153, 0, 0.5); }
         
-        /* 5. SEARCH BAR WITH NEON GLOW */
         .search-section { max-width: 600px; margin: 30px auto; padding: 0 15px; }
         .search-inner { position: relative; border-radius: 30px; padding: 2px; background: linear-gradient(90deg, #ffaa00, #00ffcc); box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
         .search-input { width: 100%; border: none; padding: 12px 25px; background: #0f0f17; color: #fff; border-radius: 30px; outline: none; font-size: 16px; }
         .search-inner i { position: absolute; right: 20px; top: 15px; color: #00ffcc; font-size: 18px; }
 
-        /* 6. CATEGORY BAR */
         .category-bar { background-color: #0d0d14; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); overflow-x: auto; white-space: nowrap; text-align: center; }
         .category-btn { background-color: #161622; color: #aaaaaa; border: 1px solid rgba(255,255,255,0.05); padding: 8px 25px; margin-right: 10px; border-radius: 20px; font-size: 14px; transition: 0.3s; cursor: pointer; }
         .category-btn:hover, .category-btn.active { background-color: #ffaa00; color: #000; box-shadow: 0 0 15px rgba(255, 170, 0, 0.4); border-color: #ffaa00; font-weight: bold; }
         
-        /* 7. FLOATING VIDEO CARDS WITH WATER GLOW */
         .video-card { background: #0f0f17; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; overflow: hidden; margin-bottom: 30px; position: relative; animation: float 4s ease-in-out infinite; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
         .video-card:hover { animation-play-state: paused; transform: scale(1.04) translateY(-5px) !important; border-color: #00ffcc; box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), 0 0 50px rgba(255, 170, 0, 0.2); }
@@ -56,7 +46,6 @@
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
-        /* Video Overlays (Badges) */
         .thumb-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; cursor: pointer; z-index: 2; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease; }
         .play-btn { width: 60px; height: 60px; background: rgba(255, 170, 0, 0.9); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 170, 0, 0.6); transition: 0.3s; }
         .play-btn i { color: #000; font-size: 22px; margin-left: 4px; }
@@ -65,7 +54,6 @@
         .badge-hd { position: absolute; top: 12px; left: 12px; background: linear-gradient(90deg, #00f2fe, #4facfe); color: #fff; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; z-index: 3; }
         .badge-time { position: absolute; bottom: 12px; right: 12px; background: rgba(0, 0, 0, 0.8); color: #fff; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px; z-index: 3; }
 
-        /* Video Info & Interactive Buttons */
         .video-info { padding: 15px; background: #0f0f17; }
         .video-title { font-size: 15px; font-weight: bold; color: #ffffff; line-height: 1.4; height: 42px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 10px; }
         .video-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: 5px; }
@@ -76,30 +64,26 @@
 
         .ads-banner { background: #0d0d14; border: 1px dashed #ffaa00; text-align: center; padding: 20px; margin: 30px 0; color: #ffaa00; border-radius: 8px; box-shadow: 0 0 15px rgba(255, 170, 0, 0.1); }
 
-        /* 8. LIVE NOTIFICATION TOAST */
         #notification-toast { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #10101a 0%, #07070a 100%); border: 1px solid #00ffcc; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); z-index: 9995; display: flex; align-items: center; gap: 12px; transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #notification-toast i { color: #00ffcc; font-size: 20px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-    <!-- 1. PRELOADER SCREEN -->
     <div id="preloader"><div class="loader-circle"></div><div class="loader-text" id="loader-percentage">0%</div></div>
-    
-    <!-- 2. 18+ AGE GATE -->
     <div id="age-gate"><div class="age-gate-box"><h2>⚠️ WARNING: 18+ ONLY</h2><p class="text-muted">This website contains adult content. You must be 18 years or older to enter.</p><hr style="border-color: rgba(255,170,0,0.2);"><div class="mt-4"><button class="btn-enter" onclick="enterSite()">ENTER (18+)</button><button class="btn-exit" onclick="exitSite()">EXIT</button></div></div></div>
 
-    <!-- LIVE NOTIFICATION TOAST -->
     <div id="notification-toast">
         <i class="fa-solid fa-circle-bolt"></i>
         <div id="notification-text" style="font-size: 13px; font-weight: 500;"></div>
     </div>
 
-    <!-- 3. NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top"><div class="container"><a class="navbar-brand" href="#">කාම<span class="brand-premium">YAHANA AI</span></a></div></nav>
 
-    <!-- 4. GLOWING SEARCH BAR -->
     <div class="search-section">
         <div class="search-inner">
             <input type="text" id="search-input" class="search-input" placeholder="Search premium videos here..." onkeyup="searchVideos()">
@@ -107,7 +91,6 @@
         </div>
     </div>
 
-    <!-- 5. CATEGORY BAR -->
     <div class="category-bar">
         <div class="container">
             <button class="category-btn active" onclick="filterVideos('all', this)">All Videos</button>
@@ -120,32 +103,26 @@
     <div class="container my-4">
         <div class="ads-banner">[ ADSTERRA / EXOCLICK BANNER PLACEHOLDER ]</div>
         <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
-        
-        <!-- VIDEO GRID -->
         <div class="row" id="video-grid"></div>
     </div>
 
-    <!-- Firebase SDK Modules Integration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-
-        // Your web app's Firebase configuration
+    <script>
+        // 1. FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyDTsuW5Ib2FJ1k6ZuykeJotdIS0qU68JrI",
             authDomain: "kamayahana-35572.firebaseapp.com",
             projectId: "kamayahana-35572",
             storageBucket: "kamayahana-35572.firebasestorage.app",
             messagingSenderId: "432931168383",
-            appId: "1:432931168383:web:2b17621ab16f801adb5f4a"
+            appId: "1:432931168383:web:2b17621ab16f801adb5f4a",
+            databaseURL: "https://kamayahana-35572-default-rtdb.firebaseio.com" // ඔයාගේ DB URL එක
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        console.log("Firebase initialized successfully!");
-    </script>
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-    <!-- Main Site Logic Script -->
-    <script>
+        // 2. GOOGLE SHEET CONFIGURATION
         const SPREADSHEET_ID = '19fRcgFz3BE41d8gREOzR7mOgl53d6SYyWcY3iyuO4PI'; 
         const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
@@ -172,11 +149,11 @@
                     
                     preloader.style.opacity = "0";
                     setTimeout(() => { preloader.style.display = "none"; ageGate.style.display = "flex"; }, 500);
-                    
                     setTimeout(startLiveNotifications, 5000);
                 });
         });
 
+        // 3. VIDEO RENDER WITH REALTIME DATABASE LISTENERS
         function renderVideos(rows) {
             let gridHtml = '';
             rows.forEach((row, index) => {
@@ -186,78 +163,108 @@
                 const thumb = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video';
                 const duration = row.c[4] ? row.c[4].v : 'HD'; 
 
-                const randomViews = Math.floor(Math.random() * 45) + 5;
-                const randomLikes = Math.floor(randomViews * 12) + 42;
+                // වීඩියෝ එකේ ලින්ක් එකෙන් අකුරු 15ක Unique ID එකක් හදනවා DB එකේ සේව් කරන්න
+                const videoId = btoa(link).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
 
                 gridHtml += `
                     <div class="col-lg-4 col-md-6 video-item ${category}">
-                        <div class="video-card">
+                        <div class="video-card" id="card-${videoId}">
                             <div class="video-container">
                                 <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
                                 <div class="badge-time">${duration}</div>
-                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}')">
+                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
                                     <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                                 </div>
                                 <iframe id="player-${index}" src="" frameborder="0" allowfullscreen></iframe>
                             </div>
                             <div class="video-info">
                                 <div class="video-title">${title}</div>
-                                <div class="video-meta"><i class="fa-solid fa-eye me-1"></i>${randomViews}K Views</div>
+                                <div class="video-meta"><i class="fa-solid fa-eye me-1"></i><span class="v-count">0</span> Views</div>
                                 <div class="video-actions">
-                                    <button class="action-btn" onclick="toggleLike(this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>${randomLikes}</span></button>
-                                    <button class="action-btn" onclick="toggleDislike(this)"><i class="fa-solid fa-thumbs-down"></i></button>
+                                    <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>0</span></button>
+                                    <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down me-1"></i><span>0</span></button>
                                     <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
+
+                // Firebase එකෙන් Real-time දත්ත අරන් කාඩ් එකට දානවා (ලෝඩ් වෙද්දීම)
+                database.ref('v_stats/' + videoId).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    const card = document.getElementById(`card-${videoId}`);
+                    if (card && data) {
+                        card.querySelector('.v-count').innerText = data.views || 0;
+                        card.querySelector('.btn-like span').innerText = data.likes || 0;
+                        card.querySelector('.btn-dislike span').innerText = data.dislikes || 0;
+                    }
+                });
             });
             document.getElementById('video-grid').innerHTML = gridHtml || '<p class="text-center text-muted my-4">No videos found matching your request.</p>';
+        }
+
+        // 4. REAL VIEWS INCREMENT TRIGGER
+        function playVideo(videoUrl, playerId, thumbId, videoId) {
+            document.getElementById(playerId).src = videoUrl;
+            document.getElementById(thumbId).style.opacity = '0';
+            setTimeout(() => { document.getElementById(thumbId).style.display = 'none'; }, 300);
+
+            // වීඩියෝ එක ප්ලේ කරපු ගමන් Database එකේ Views +1 කින් වැඩි කරනවා
+            database.ref('v_stats/' + videoId + '/views').transaction((currentViews) => {
+                return (currentViews || 0) + 1;
+            });
+        }
+
+        // 5. REAL LIVE LIKE SYSTEM
+        function toggleLike(videoId, btn) {
+            let countSpan = btn.querySelector('span');
+            if(btn.classList.contains('active-like')) {
+                btn.classList.remove('active-like');
+                database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 1) - 1);
+            } else {
+                btn.classList.add('active-like');
+                database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 0) + 1);
+                
+                // Dislike කරලා තිබ්බොත් ඒක අයින් කරනවා
+                let dBtn = btn.nextElementSibling;
+                if(dBtn.classList.contains('active-dislike')) {
+                    dBtn.classList.remove('active-dislike');
+                    database.ref('v_stats/' + videoId + '/dislikes').transaction(c => (c || 1) - 1);
+                }
+            }
+        }
+
+        // 6. REAL LIVE DISLIKE SYSTEM
+        function toggleDislike(videoId, btn) {
+            if(btn.classList.contains('active-dislike')) {
+                btn.classList.remove('active-dislike');
+                database.ref('v_stats/' + videoId + '/dislikes').transaction(c => (c || 1) - 1);
+            } else {
+                btn.classList.add('active-dislike');
+                database.ref('v_stats/' + videoId + '/dislikes').transaction(c => (c || 0) + 1);
+                
+                // Like කරලා තිබ්බොත් ඒක අයින් කරනවා
+                let lBtn = btn.previousElementSibling;
+                if(lBtn.classList.contains('active-like')) {
+                    lBtn.classList.remove('active-like');
+                    database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 1) - 1);
+                }
+            }
         }
 
         function searchVideos() {
             let query = document.getElementById('search-input').value.toLowerCase();
             let items = document.querySelectorAll('.video-item');
-            
             items.forEach(item => {
                 let title = item.querySelector('.video-title').innerText.toLowerCase();
-                if(title.includes(query)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
+                item.style.display = title.includes(query) ? 'block' : 'none';
             });
         }
 
-        function playVideo(videoUrl, playerId, thumbId) {
-            document.getElementById(playerId).src = videoUrl;
-            document.getElementById(thumbId).style.opacity = '0';
-            setTimeout(() => { document.getElementById(thumbId).style.display = 'none'; }, 300);
-        }
-
-        function toggleLike(btn) {
-            let countSpan = btn.querySelector('span');
-            let currentCount = parseInt(countSpan.innerText);
-            if(btn.classList.contains('active-like')) {
-                btn.classList.remove('active-like'); countSpan.innerText = currentCount - 1;
-            } else {
-                btn.classList.add('active-like'); countSpan.innerText = currentCount + 1;
-                btn.nextElementSibling.classList.remove('active-dislike');
-            }
-        }
-
-        function toggleDislike(btn) {
-            if(btn.classList.contains('active-dislike')) { btn.classList.remove('active-dislike'); } 
-            else { btn.classList.add('active-dislike'); btn.previousElementSibling.classList.remove('active-like'); }
-        }
-
         function shareVideo(title, url) {
-            if (navigator.share) {
-                navigator.share({ title: title, url: url }).catch(console.error);
-            } else {
-                alert("Link copied to clipboard! Share it with friends.");
-            }
+            if (navigator.share) { navigator.share({ title: title, url: url }).catch(console.error); } 
+            else { alert("Link copied to clipboard!"); }
         }
 
         function filterVideos(category, buttonElement) {
@@ -298,10 +305,7 @@
                 }
 
                 toast.style.transform = 'translateY(0%)';
-                setTimeout(() => {
-                    toast.style.transform = 'translateY(150%)';
-                }, 4000);
-
+                setTimeout(() => { toast.style.transform = 'translateY(150%)'; }, 4000);
             }, 12000); 
         }
     </script>
