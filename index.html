@@ -169,7 +169,8 @@
                 const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
                 const duration = row.c[3] ? row.c[3].v : 'HD';
                 const thumb = getDoodStreamThumbnail(link);
-                const videoId = btoa(link).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
+                // මේක renderVideos ඇතුලේ තියෙන id හදන තැනට දාන්න
+const videoId = "v" + btoa(link.replace(/[^a-zA-Z0-9]/g, "").substring(0, 10));
 
                 gridHtml += `
                     <div class="col-lg-4 col-md-6 video-item ${category}">
@@ -212,20 +213,20 @@
             });
         }
 
-        function toggleLike(videoId, btn) {
-            if(btn.classList.contains('active-like')) {
-                btn.classList.remove('active-like');
-                database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 1) - 1);
-            } else {
-                btn.classList.add('active-like');
-                database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 0) + 1);
-                let dBtn = btn.nextElementSibling;
-                if(dBtn.classList.contains('active-dislike')) {
-                    dBtn.classList.remove('active-dislike');
-                    database.ref('v_stats/' + videoId + '/dislikes').transaction(c => (c || 1) - 1);
-                }
-            }
-        }
+        function toggleLike(vId, btn) {
+    console.log("Like clicked for ID:", vId); // මේකෙන් බලන්න හරියට ID එක එනවද කියලා
+    
+    // Database reference එකට අනිවාර්යයෙන්ම vId එක යන්න ඕනේ
+    const ref = database.ref('v_stats/' + vId + '/likes');
+    
+    if(btn.classList.contains('active-like')) {
+        btn.classList.remove('active-like');
+        ref.transaction(c => (c || 1) - 1);
+    } else {
+        btn.classList.add('active-like');
+        ref.transaction(c => (c || 0) + 1);
+    }
+}
 
         function toggleDislike(videoId, btn) {
             if(btn.classList.contains('active-dislike')) {
@@ -299,20 +300,20 @@
             }, 12000); 
         }
         function syncAllStats() {
-            database.ref('v_stats').on('value', (snapshot) => {
-                const allData = snapshot.val();
-                if (allData) {
-                    for (let vId in allData) {
-                        const card = document.getElementById(`card-${vId}`);
-                        if (card) {
-                            card.querySelector('.v-count').innerText = allData[vId].views || 0;
-                            card.querySelector('.btn-like span').innerText = allData[vId].likes || 0;
-                            card.querySelector('.btn-dislike span').innerText = allData[vId].dislikes || 0;
-                        }
-                    }
-                }
-            });
-        }
+    database.ref('v_stats').on('value', (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            const vId = childSnapshot.key; // මේක තමයි database එකේ තියෙන ID එක
+            const data = childSnapshot.val();
+            
+            const card = document.getElementById(`card-${vId}`);
+            if (card) {
+                card.querySelector('.v-count').innerText = data.views || 0;
+                card.querySelector('.btn-like span').innerText = data.likes || 0;
+                card.querySelector('.btn-dislike span').innerText = data.dislikes || 0;
+            }
+        });
+    });
+}
     </script>
 
     <script src="https://pl30299903.effectivecpmnetwork.com/46/6a/91/466a915a022296c27589e6d1afb6c8d6.js"></script>
