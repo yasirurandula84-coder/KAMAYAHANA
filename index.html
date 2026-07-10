@@ -151,26 +151,16 @@
                 });
         });
 
-        // 🛠️ DOODSTREAM AUTOMATIC MEDIA EXTRACTOR
-        function getDoodStreamDetails(videoUrl) {
+        // 🛠️ DOODSTREAM AUTOMATIC THUMBNAIL GENERATOR ONLY
+        function getDoodStreamThumbnail(videoUrl) {
             let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
-            let duration = "12:45"; 
-
-            // DoodStream ID එක Extract කරගැනීම (dood.to, dood.li, doodstream.com ඔක්කොටම වැඩ)
             let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
             
             if (doodIdMatch && doodIdMatch[1]) {
                 let videoId = doodIdMatch[1];
-                // 🔥 DoodStream වල Splash Image (Thumbnail) එක Auto වැටෙන හොර ලින්ක් එක
                 thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
             }
-
-            // වීඩියෝවලට Random විනාඩි 10-28ක කාලයක් වැටෙන්න සැලැස්වීම
-            let randomMin = Math.floor(Math.random() * 18) + 10;
-            let randomSec = Math.floor(Math.random() * 50) + 10;
-            duration = `${randomMin}:${randomSec}`;
-
-            return { thumb, duration };
+            return thumb;
         }
 
         function renderVideos(rows) {
@@ -180,10 +170,11 @@
                 const link = row.c[1] ? row.c[1].v : '#';
                 const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
                 
-                // DoodStream Details Auto Fetch
-                const media = getDoodStreamDetails(link);
-                const thumb = media.thumb;
-                const duration = media.duration;
+                // 🔥 Sheet එකේ Column D (4 වෙනි තීරුවේ) තියෙන Real Duration එක ගන්නවා. නැත්නම් "HD" කියලා වැටෙනවා.
+                const duration = row.c[3] ? row.c[3].v : 'HD'; 
+                
+                // Thumbnail එක විතරක් ලින්ක් එකෙන් Auto හදන්න දෙනවා
+                const thumb = getDoodStreamThumbnail(link);
 
                 const videoId = btoa(link).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
 
@@ -193,7 +184,6 @@
                             <div class="video-container">
                                 <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
                                 <div class="badge-time">${duration}</div>
-                                <!-- Thumbnail එක Load වෙද්දී Error වුණොත් Default එකක් වැටෙන්න onError දාලා තියෙන්නේ -->
                                 <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}'), url('https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Tube');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
                                     <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                                 </div>
