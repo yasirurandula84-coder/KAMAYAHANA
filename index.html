@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>කාම යහන - AI Premium Tube</title>
+    <title>කාම යහන - Premium Tube</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { 
@@ -63,8 +65,6 @@
         .video-meta { font-size: 12px; color: #5c5c70; font-weight: 500; }
 
         .ads-banner { text-align: center; margin: 30px 0; min-height: 90px; }
-        .grid-ad-slot { display: flex; justify-content: center; align-items: center; margin-bottom: 30px; width: 100%; min-height: 250px; }
-
         #notification-toast { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #10101a 0%, #07070a 100%); border: 1px solid #00ffcc; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); z-index: 9995; display: flex; align-items: center; gap: 12px; transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #notification-toast i { color: #00ffcc; font-size: 20px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
@@ -102,9 +102,7 @@
     </div>
 
     <div class="container my-4">
-        <div class="ads-banner">
-            </div>
-
+        <div class="ads-banner"></div>
         <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
         <div class="row" id="video-grid"></div>
     </div>
@@ -153,14 +151,39 @@
                 });
         });
 
+        // 🛠️ DOODSTREAM AUTOMATIC MEDIA EXTRACTOR
+        function getDoodStreamDetails(videoUrl) {
+            let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
+            let duration = "12:45"; 
+
+            // DoodStream ID එක Extract කරගැනීම (dood.to, dood.li, doodstream.com ඔක්කොටම වැඩ)
+            let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
+            
+            if (doodIdMatch && doodIdMatch[1]) {
+                let videoId = doodIdMatch[1];
+                // 🔥 DoodStream වල Splash Image (Thumbnail) එක Auto වැටෙන හොර ලින්ක් එක
+                thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
+            }
+
+            // වීඩියෝවලට Random විනාඩි 10-28ක කාලයක් වැටෙන්න සැලැස්වීම
+            let randomMin = Math.floor(Math.random() * 18) + 10;
+            let randomSec = Math.floor(Math.random() * 50) + 10;
+            duration = `${randomMin}:${randomSec}`;
+
+            return { thumb, duration };
+        }
+
         function renderVideos(rows) {
             let gridHtml = '';
             rows.forEach((row, index) => {
                 const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
                 const link = row.c[1] ? row.c[1].v : '#';
                 const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
-                const thumb = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video';
-                const duration = row.c[4] ? row.c[4].v : 'HD'; 
+                
+                // DoodStream Details Auto Fetch
+                const media = getDoodStreamDetails(link);
+                const thumb = media.thumb;
+                const duration = media.duration;
 
                 const videoId = btoa(link).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
 
@@ -170,10 +193,11 @@
                             <div class="video-container">
                                 <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
                                 <div class="badge-time">${duration}</div>
-                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                                <!-- Thumbnail එක Load වෙද්දී Error වුණොත් Default එකක් වැටෙන්න onError දාලා තියෙන්නේ -->
+                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}'), url('https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Tube');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
                                     <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                                 </div>
-                                <iframe id="player-${index}" src="" frameborder="0" allowfullscreen></iframe>
+                                <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
                             </div>
                             <div class="video-info">
                                 <div class="video-title">${title}</div>
@@ -187,15 +211,6 @@
                         </div>
                     </div>
                 `;
-
-                // 🎯 ADS SLOT 2: වීඩියෝ 3කට සැරයක් Grid එක මැදට වැටෙන Ads (300x250 Native Banner)
-                if ((index + 1) % 3 === 0) {
-                    gridHtml += `
-                        <div class="col-lg-4 col-md-6 grid-ad-slot">
-                            <div style="color: #6c757d; font-size:12px; text-align:center; border: 1px dashed #333; padding: 20px; width:100%;">[ ADVERTISEMENT SLOT ]</div>
-                            </div>
-                    `;
-                }
 
                 database.ref('v_stats/' + videoId).on('value', (snapshot) => {
                     const data = snapshot.val();
@@ -306,8 +321,9 @@
             }, 12000); 
         }
     </script>
+
+    <!-- 🎯 ADS SLOT 3: POPUNDER ADS -->
     <script src="https://pl30299903.effectivecpmnetwork.com/46/6a/91/466a915a022296c27589e6d1afb6c8d6.js"></script>
 
-
-    </body>
+</body>
 </html>
