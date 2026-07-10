@@ -62,7 +62,8 @@
         .action-btn.active-dislike { color: #ff3333; text-shadow: 0 0 10px rgba(255,51,51,0.4); }
         .video-meta { font-size: 12px; color: #5c5c70; font-weight: 500; }
 
-        .ads-banner { background: #0d0d14; border: 1px dashed #ffaa00; text-align: center; padding: 20px; margin: 30px 0; color: #ffaa00; border-radius: 8px; box-shadow: 0 0 15px rgba(255, 170, 0, 0.1); }
+        .ads-banner { text-align: center; margin: 30px 0; min-height: 90px; }
+        .grid-ad-slot { display: flex; justify-content: center; align-items: center; margin-bottom: 30px; width: 100%; min-height: 250px; }
 
         #notification-toast { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #10101a 0%, #07070a 100%); border: 1px solid #00ffcc; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); z-index: 9995; display: flex; align-items: center; gap: 12px; transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #notification-toast i { color: #00ffcc; font-size: 20px; animation: pulse 1.5s infinite; }
@@ -101,13 +102,14 @@
     </div>
 
     <div class="container my-4">
-        <div class="ads-banner">[ ADSTERRA / EXOCLICK BANNER PLACEHOLDER ]</div>
+        <div class="ads-banner">
+            </div>
+
         <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
         <div class="row" id="video-grid"></div>
     </div>
 
     <script>
-        // 1. FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyDTsuW5Ib2FJ1k6ZuykeJotdIS0qU68JrI",
             authDomain: "kamayahana-35572.firebaseapp.com",
@@ -115,14 +117,12 @@
             storageBucket: "kamayahana-35572.firebasestorage.app",
             messagingSenderId: "432931168383",
             appId: "1:432931168383:web:2b17621ab16f801adb5f4a",
-            databaseURL: "https://kamayahana-35572-default-rtdb.firebaseio.com" // ඔයාගේ DB URL එක
+            databaseURL: "https://kamayahana-35572-default-rtdb.firebaseio.com"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 2. GOOGLE SHEET CONFIGURATION
         const SPREADSHEET_ID = '19fRcgFz3BE41d8gREOzR7mOgl53d6SYyWcY3iyuO4PI'; 
         const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
@@ -153,7 +153,6 @@
                 });
         });
 
-        // 3. VIDEO RENDER WITH REALTIME DATABASE LISTENERS
         function renderVideos(rows) {
             let gridHtml = '';
             rows.forEach((row, index) => {
@@ -163,7 +162,6 @@
                 const thumb = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video';
                 const duration = row.c[4] ? row.c[4].v : 'HD'; 
 
-                // වීඩියෝ එකේ ලින්ක් එකෙන් අකුරු 15ක Unique ID එකක් හදනවා DB එකේ සේව් කරන්න
                 const videoId = btoa(link).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
 
                 gridHtml += `
@@ -190,7 +188,15 @@
                     </div>
                 `;
 
-                // Firebase එකෙන් Real-time දත්ත අරන් කාඩ් එකට දානවා (ලෝඩ් වෙද්දීම)
+                // 🎯 ADS SLOT 2: වීඩියෝ 3කට සැරයක් Grid එක මැදට වැටෙන Ads (300x250 Native Banner)
+                if ((index + 1) % 3 === 0) {
+                    gridHtml += `
+                        <div class="col-lg-4 col-md-6 grid-ad-slot">
+                            <div style="color: #6c757d; font-size:12px; text-align:center; border: 1px dashed #333; padding: 20px; width:100%;">[ ADVERTISEMENT SLOT ]</div>
+                            </div>
+                    `;
+                }
+
                 database.ref('v_stats/' + videoId).on('value', (snapshot) => {
                     const data = snapshot.val();
                     const card = document.getElementById(`card-${videoId}`);
@@ -204,29 +210,23 @@
             document.getElementById('video-grid').innerHTML = gridHtml || '<p class="text-center text-muted my-4">No videos found matching your request.</p>';
         }
 
-        // 4. REAL VIEWS INCREMENT TRIGGER
         function playVideo(videoUrl, playerId, thumbId, videoId) {
             document.getElementById(playerId).src = videoUrl;
             document.getElementById(thumbId).style.opacity = '0';
             setTimeout(() => { document.getElementById(thumbId).style.display = 'none'; }, 300);
 
-            // වීඩියෝ එක ප්ලේ කරපු ගමන් Database එකේ Views +1 කින් වැඩි කරනවා
             database.ref('v_stats/' + videoId + '/views').transaction((currentViews) => {
                 return (currentViews || 0) + 1;
             });
         }
 
-        // 5. REAL LIVE LIKE SYSTEM
         function toggleLike(videoId, btn) {
-            let countSpan = btn.querySelector('span');
             if(btn.classList.contains('active-like')) {
                 btn.classList.remove('active-like');
                 database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 1) - 1);
             } else {
                 btn.classList.add('active-like');
                 database.ref('v_stats/' + videoId + '/likes').transaction(c => (c || 0) + 1);
-                
-                // Dislike කරලා තිබ්බොත් ඒක අයින් කරනවා
                 let dBtn = btn.nextElementSibling;
                 if(dBtn.classList.contains('active-dislike')) {
                     dBtn.classList.remove('active-dislike');
@@ -235,7 +235,6 @@
             }
         }
 
-        // 6. REAL LIVE DISLIKE SYSTEM
         function toggleDislike(videoId, btn) {
             if(btn.classList.contains('active-dislike')) {
                 btn.classList.remove('active-dislike');
@@ -243,8 +242,6 @@
             } else {
                 btn.classList.add('active-dislike');
                 database.ref('v_stats/' + videoId + '/dislikes').transaction(c => (c || 0) + 1);
-                
-                // Like කරලා තිබ්බොත් ඒක අයින් කරනවා
                 let lBtn = btn.previousElementSibling;
                 if(lBtn.classList.contains('active-like')) {
                     lBtn.classList.remove('active-like');
@@ -309,5 +306,8 @@
             }, 12000); 
         }
     </script>
-</body>
+    <script src="https://pl30299903.effectivecpmnetwork.com/46/6a/91/466a915a022296c27589e6d1afb6c8d6.js"></script>
+
+
+    </body>
 </html>
