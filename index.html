@@ -200,18 +200,7 @@
             syncAllStats(); 
         }
 
-                database.ref('v_stats/' + videoId).on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    const card = document.getElementById(`card-${videoId}`);
-                    if (card && data) {
-                        card.querySelector('.v-count').innerText = data.views || 0;
-                        card.querySelector('.btn-like span').innerText = data.likes || 0;
-                        card.querySelector('.btn-dislike span').innerText = data.dislikes || 0;
-                    }
-                });
-            });
-            document.getElementById('video-grid').innerHTML = gridHtml || '<p class="text-center text-muted my-4">No videos found matching your request.</p>';
-        }
+                
 
         function playVideo(videoUrl, playerId, thumbId, videoId) {
             document.getElementById(playerId).src = videoUrl;
