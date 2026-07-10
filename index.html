@@ -125,29 +125,27 @@
         let allVideoData = []; 
 
         document.addEventListener("DOMContentLoaded", function() {
+            let percentageText = document.getElementById("loader-percentage");
+            let preloader = document.getElementById("preloader");
+            let ageGate = document.getElementById("age-gate");
+            let count = 0;
+            let counterInterval = setInterval(() => {
+                count += 5;
+                if (count > 100) count = 100;
+                percentageText.innerText = count + "%";
+                if (count === 100) { clearInterval(counterInterval); }
+            }, 25);
+
             fetch(SPREADSHEET_URL)
                 .then(res => res.text())
                 .then(data => {
                     const jsonData = JSON.parse(data.substring(47, data.length - 2));
-                    renderVideos(jsonData.table.rows);
+                    allVideoData = jsonData.table.rows;
+                    renderVideos(allVideoData);
                     
-                    // 🔥 FIX: .once වෙනුවට .on පාවිච්චි කිරීමෙන් දත්ත Real-time update වේ
-                    database.ref('v_stats').on('value', (snapshot) => {
-                        const allStats = snapshot.val();
-                        if (allStats) {
-                            for (let vId in allStats) {
-                                const card = document.getElementById(`card-${vId}`);
-                                if (card) {
-                                    card.querySelector('.v-count').innerText = allStats[vId].views || 0;
-                                    card.querySelector('.btn-like span').innerText = allStats[vId].likes || 0;
-                                    card.querySelector('.btn-dislike span').innerText = allStats[vId].dislikes || 0;
-                                }
-                            }
-                        }
-                    });
-
-                    document.getElementById("preloader").style.display = "none";
-                    document.getElementById("age-gate").style.display = "flex";
+                    preloader.style.opacity = "0";
+                    setTimeout(() => { preloader.style.display = "none"; ageGate.style.display = "flex"; }, 500);
+                    setTimeout(startLiveNotifications, 5000);
                 });
         });
 
@@ -169,13 +167,8 @@
                 const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
                 const link = row.c[1] ? row.c[1].v : '#';
                 const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
-                
-                // 🔥 Sheet එකේ Column D (4 වෙනි තීරුවේ) තියෙන Real Duration එක ගන්නවා. නැත්නම් "HD" කියලා වැටෙනවා.
-                const duration = row.c[3] ? row.c[3].v : 'HD'; 
-                
-                // Thumbnail එක විතරක් ලින්ක් එකෙන් Auto හදන්න දෙනවා
+                const duration = row.c[3] ? row.c[3].v : 'HD';
                 const thumb = getDoodStreamThumbnail(link);
-
                 const videoId = btoa(link).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
 
                 gridHtml += `
@@ -184,7 +177,7 @@
                             <div class="video-container">
                                 <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
                                 <div class="badge-time">${duration}</div>
-                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}'), url('https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Tube');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
                                     <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                                 </div>
                                 <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
@@ -199,8 +192,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
+            });
+            document.getElementById('video-grid').innerHTML = gridHtml || '<p>No videos found.</p>';
+            
+            // දැන් මෙතන දත්ත load කරන ෆන්ක්ෂන් එක call කරන්න
+            syncAllStats(); 
+        }
 
                 database.ref('v_stats/' + videoId).on('value', (snapshot) => {
                     const data = snapshot.val();
@@ -310,6 +308,21 @@
                 toast.style.transform = 'translateY(0%)';
                 setTimeout(() => { toast.style.transform = 'translateY(150%)'; }, 4000);
             }, 12000); 
+        }
+        function syncAllStats() {
+            database.ref('v_stats').on('value', (snapshot) => {
+                const allData = snapshot.val();
+                if (allData) {
+                    for (let vId in allData) {
+                        const card = document.getElementById(`card-${vId}`);
+                        if (card) {
+                            card.querySelector('.v-count').innerText = allData[vId].views || 0;
+                            card.querySelector('.btn-like span').innerText = allData[vId].likes || 0;
+                            card.querySelector('.btn-dislike span').innerText = allData[vId].dislikes || 0;
+                        }
+                    }
+                }
+            });
         }
     </script>
 
