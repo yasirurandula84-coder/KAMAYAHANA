@@ -3,188 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>කාම යහන - Premium Videos</title>
-    <!-- Bootstrap CSS for layout and styling -->
+    <title>කාම යහන - AI Premium Tube</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* 1. GENERAL & AI THEME STYLING */
         body {
-            background-color: #121212;
+            background-color: #08080a;
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
         }
-        /* Navbar Styling (Pornhub Theme) */
+
+        /* 2. 100% PRELOADER STYLING */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #050507;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader-circle {
+            width: 100px; height: 100px;
+            border: 4px solid #1a1a24;
+            border-top: 4px solid #ffaa00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.2);
+        }
+        .loader-text {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffaa00;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 3. 18+ AGE GATE & BLUR STYLING */
+        #age-gate {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(5, 5, 7, 0.85);
+            z-index: 9998;
+            display: none; /* JS වලින් පාලනය වේ */
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(25px); /* Background එක සම්පූර්ණයෙන් Blur කරයි */
+            -webkit-backdrop-filter: blur(25px);
+        }
+        .age-gate-box {
+            background: linear-gradient(135deg, #14141f 0%, #0d0d14 100%);
+            border: 2px solid #ffaa00;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 170, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+        }
+        .age-gate-box h2 {
+            color: #ffaa00;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .btn-enter {
+            background-color: #ffaa00; color: #000;
+            font-weight: bold; padding: 12px 30px; border-radius: 8px;
+            border: none; margin-right: 10px; transition: 0.3s;
+        }
+        .btn-enter:hover {
+            background-color: #ffffff; box-shadow: 0 0 15px #ffffff;
+        }
+        .btn-exit {
+            background-color: transparent; color: #ff3333;
+            font-weight: bold; padding: 12px 30px; border-radius: 8px;
+            border: 2px solid #ff3333; transition: 0.3s;
+        }
+        .btn-exit:hover {
+            background-color: #ff3333; color: #fff; box-shadow: 0 0 15px #ff3333;
+        }
+
+        /* 4. NAVBAR & UI STYLING */
         .navbar {
-            background-color: #1a1a1a !important;
-            border-bottom: 2px solid #ff9900;
+            background: rgba(13, 13, 20, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 170, 0, 0.2);
         }
         .navbar-brand {
-            font-weight: bold;
-            font-size: 24px;
-            color: #ffffff !important;
+            font-weight: 900; letter-spacing: 1px; font-size: 26px;
         }
         .brand-premium {
-            background-color: #ff9900;
-            color: #000000;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-left: 4px;
+            background: linear-gradient(90deg, #ff9900, #ffcc00);
+            color: #000000; padding: 3px 10px; border-radius: 6px; margin-left: 6px;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.5);
         }
-        /* Category Bar */
         .category-bar {
-            background-color: #262626;
-            padding: 10px 0;
-            overflow-x: auto;
-            white-space: nowrap;
+            background-color: #0d0d14; padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            overflow-x: auto; white-space: nowrap;
         }
         .category-btn {
-            background-color: #333333;
-            color: #ffffff;
-            border: none;
-            padding: 6px 15px;
-            margin-right: 8px;
-            border-radius: 20px;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
+            background-color: #161622; color: #aaaaaa; border: 1px solid rgba(255,255,255,0.05);
+            padding: 8px 20px; margin-right: 10px; border-radius: 20px; font-size: 14px;
+            text-decoration: none; display: inline-block; transition: 0.3s;
         }
         .category-btn:hover {
-            background-color: #ff9900;
-            color: #000000;
+            background-color: #ffaa00; color: #000; box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
         }
-        /* Video Cards */
+
+        /* 5. FLOATING AI VIDEO CARDS WITH WATER LIGHT GLOW */
         .video-card {
-            background-color: #1a1a1a;
-            border: 1px solid #2d2d2d;
-            border-radius: 8px;
+            background: #0f0f17;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-        }
-        .video-card:hover {
-            transform: scale(1.02);
-            border-color: #ff9900;
-        }
-        .video-container {
+            margin-bottom: 30px;
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            background-color: #000;
+            /* පාවෙන ඉෆෙක්ට් එක (Floating Animation) */
+            animation: float 4s ease-in-out infinite;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s;
+        }
+        
+        /* කාඩ් එකෙන් එකට පාවෙන වේගය වෙනස් කිරීමට */
+        .row div:nth-child(2) .video-card { animation-delay: 1s; }
+        .row div:nth-child(3) .video-card { animation-delay: 2s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Touch / Hover වෙද්දී පත්තු වන නියෝන් වෝටර් ලයිට්ස් */
+        .video-card:hover {
+            animation-play-state: paused; /* Hover කරද්දී පාවෙන එක නවතී */
+            transform: scale(1.04) translateY(-5px) !important;
+            border-color: #00ffcc; /* Water/Neon Cyan පාට */
+            /* වතුර ලයිට් වගේ පැතිරෙන සිරාම Glow එක */
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), 0 0 50px rgba(255, 170, 0, 0.2);
+        }
+
+        .video-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;
         }
         .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         }
-        .video-info {
-            padding: 12px;
-        }
-        .video-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #ffffff;
-        }
-        .video-meta {
-            font-size: 12px;
-            color: #888888;
-        }
-        /* Ads Space Holder */
+        .video-info { padding: 15px; background: #0f0f17; }
+        .video-title { font-size: 16px; font-weight: bold; color: #ffffff; margin-bottom: 8px; }
+        .video-meta { font-size: 13px; color: #77778e; }
+
         .ads-banner {
-            background-color: #222;
-            border: 1px dashed #ff9900;
-            text-align: center;
-            padding: 20px;
-            margin: 20px 0;
-            color: #ff9900;
-            font-weight: bold;
+            background: #0d0d14; border: 1px dashed #ffaa00; text-align: center;
+            padding: 25px; margin: 30px 0; color: #ffaa00; border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 170, 0, 0.1);
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. NAVIGATION BAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- 1. PRELOADER SCREEN (100% LOADING) -->
+    <div id="preloader">
+        <div class="loader-circle"></div>
+        <div class="loader-text" id="loader-percentage">0%</div>
+    </div>
+
+    <!-- 2. 18+ AGE GATE OVERLAY (BACKGROUND BLUR) -->
+    <div id="age-gate">
+        <div class="age-gate-box">
+            <h2>⚠️ WARNING: 18+ ONLY</h2>
+            <p class="text-muted">This website contains adult content. You must be 18 years or older to enter.</p>
+            <hr style="border-color: rgba(255,170,0,0.2);">
+            <div class="mt-4">
+                <button class="btn-enter" onclick="enterSite()">ENTER (18+)</button>
+                <button class="btn-exit" onclick="exitSite()">EXIT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. MAIN SITE CONTENT -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">කාම<span class="brand-premium">YAHANA</span></a>
+            <a class="navbar-brand" href="#">කාම<span class="brand-premium">YAHANA AI</span></a>
         </div>
     </nav>
 
-    <!-- 2. CATEGORY BAR -->
     <div class="category-bar">
         <div class="container">
             <a href="#" class="category-btn">All Videos</a>
             <a href="#" class="category-btn">Sri Lankan</a>
             <a href="#" class="category-btn">Amateur</a>
             <a href="#" class="category-btn">Leaked</a>
-            <a href="#" class="category-btn">Trending</a>
+            <a href="#" class="category-btn">AI Animation</a>
         </div>
     </div>
 
-    <div class="container my-4">
+    <div class="container my-5">
         
-        <!-- TOP ADVERTISEMENT SPACE -->
         <div class="ads-banner">
-            [ PLACE YOUR EXOCLICK / ADSTERRA BANNER CODE HERE ]
+            [ ADSTERRA / EXOCLICK BANNER PLACEHOLDER ]
         </div>
 
-        <h3 class="mb-4">🔥 Recent Uploads</h3>
+        <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px;">⚡ AI Recommended Videos</h3>
         
-        <!-- 3. VIDEO GRID -->
         <div class="row">
             
-            <!-- VIDEO CARD 1 (DoodStream Video) -->
-            <div class="col-md-4 col-sm-6">
+            <!-- VIDEO CARD 1 -->
+            <div class="col-lg-4 col-md-6">
                 <div class="video-card">
                     <div class="video-container">
-                        <!-- !!! මෙතන src="..." එකට උඹේ DoodStream Embed ලින්ක් එක දාපන් !!! -->
                         <iframe src="https://doodstream.com/e/f81xshw9b4yq" frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <div class="video-title">Sri Lankan Hot Model Leaked Video #1</div>
-                        <div class="video-meta">Views: 1.2K • Uploaded: Today</div>
+                        <div class="video-meta">🟢 4.5K Views • Just Now</div>
                     </div>
                 </div>
             </div>
 
-            <!-- VIDEO CARD 2 (DoodStream Video) -->
-            <div class="col-md-4 col-sm-6">
+            <!-- VIDEO CARD 2 -->
+            <div class="col-lg-4 col-md-6">
                 <div class="video-card">
                     <div class="video-container">
                         <iframe src="https://doodstream.com/e/f81xshw9b4yq" frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <div class="video-title">Amateur Couple Hidden Cam Viral</div>
-                        <div class="video-meta">Views: 850 • Uploaded: 1 day ago</div>
+                        <div class="video-meta">🟢 2.1K Views • 2 Hours Ago</div>
                     </div>
                 </div>
             </div>
 
-            <!-- VIDEO CARD 3 (DoodStream Video) -->
-            <div class="col-md-4 col-sm-6">
+            <!-- VIDEO CARD 3 -->
+            <div class="col-lg-4 col-md-6">
                 <div class="video-card">
                     <div class="video-container">
                         <iframe src="https://doodstream.com/e/f81xshw9b4yq" frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <div class="video-title">College Girl Bathroom Selfie Tape</div>
-                        <div class="video-meta">Views: 3.4K • Uploaded: 3 days ago</div>
+                        <div class="video-meta">🟢 12K Views • Yesterday</div>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- BOTTOM ADVERTISEMENT SPACE -->
-        <div class="ads-banner">
-            [ PLACE YOUR EXOCLICK / ADSTERRA BANNER CODE HERE ]
-        </div>
-
     </div>
 
-    <!-- Bootstrap JS (Optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 4. JAVASCRIPT LOGIC FOR ANIMATIONS & AGE GATE -->
+    <script>
+        // LOADING SCREEN 0% TO 100% COUNTER RUNNER
+        document.addEventListener("DOMContentLoaded", function() {
+            let percentageText = document.getElementById("loader-percentage");
+            let preloader = document.getElementById("preloader");
+            let ageGate = document.getElementById("age-gate");
+            let count = 0;
+
+            let counterInterval = setInterval(() => {
+                count += 4; // වේගය වෙනස් කරන්න මෙතන අගය වෙනස් කරන්න
+                if (count > 100) count = 100;
+                percentageText.innerText = count + "%";
+
+                if (count === 100) {
+                    clearInterval(counterInterval);
+                    // Loading ඉවර වුණාම සුපිරියට Fade out වෙනවා
+                    preloader.style.opacity = "0";
+                    setTimeout(() => {
+                        preloader.style.display = "none";
+                        // Loading ඉවර වුණු ගමන් Age Gate එක Blur එකත් එක්කම මැදින් වැටෙනවා
+                        ageGate.style.display = "flex";
+                    }, 500);
+                }
+            }, 50); // කවුන්ටරය රන් වන වේගය (මිලිසෙකන්ඩ්ස් වලින්)
+        });
+
+        // ENTER SITE ACTION (REMOVE BLUR)
+        function enterSite() {
+            let ageGate = document.getElementById("age-gate");
+            ageGate.style.opacity = "0";
+            setTimeout(() => {
+                ageGate.style.display = "none";
+            }, 400);
+        }
+
+        // EXIT SITE ACTION (REDIRECT TO GOOGLE)
+        function exitSite() {
+            window.location.href = "https://www.google.com";
+        }
+    </script>
 </body>
 </html>
