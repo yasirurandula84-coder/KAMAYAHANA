@@ -125,27 +125,29 @@
         let allVideoData = []; 
 
         document.addEventListener("DOMContentLoaded", function() {
-            let percentageText = document.getElementById("loader-percentage");
-            let preloader = document.getElementById("preloader");
-            let ageGate = document.getElementById("age-gate");
-            let count = 0;
-            let counterInterval = setInterval(() => {
-                count += 5;
-                if (count > 100) count = 100;
-                percentageText.innerText = count + "%";
-                if (count === 100) { clearInterval(counterInterval); }
-            }, 25);
-
             fetch(SPREADSHEET_URL)
                 .then(res => res.text())
                 .then(data => {
                     const jsonData = JSON.parse(data.substring(47, data.length - 2));
-                    allVideoData = jsonData.table.rows;
-                    renderVideos(allVideoData);
+                    renderVideos(jsonData.table.rows);
                     
-                    preloader.style.opacity = "0";
-                    setTimeout(() => { preloader.style.display = "none"; ageGate.style.display = "flex"; }, 500);
-                    setTimeout(startLiveNotifications, 5000);
+                    // 🔥 FIX: .once වෙනුවට .on පාවිච්චි කිරීමෙන් දත්ත Real-time update වේ
+                    database.ref('v_stats').on('value', (snapshot) => {
+                        const allStats = snapshot.val();
+                        if (allStats) {
+                            for (let vId in allStats) {
+                                const card = document.getElementById(`card-${vId}`);
+                                if (card) {
+                                    card.querySelector('.v-count').innerText = allStats[vId].views || 0;
+                                    card.querySelector('.btn-like span').innerText = allStats[vId].likes || 0;
+                                    card.querySelector('.btn-dislike span').innerText = allStats[vId].dislikes || 0;
+                                }
+                            }
+                        }
+                    });
+
+                    document.getElementById("preloader").style.display = "none";
+                    document.getElementById("age-gate").style.display = "flex";
                 });
         });
 
