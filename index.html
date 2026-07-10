@@ -6,12 +6,24 @@
     <title>කාම යහන - AI Premium Tube</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #08080a; color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+        /* 1. GENERAL & BACKGROUND STYLING */
+        body { 
+            background-color: #060608; 
+            color: #ffffff; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            overflow-x: hidden; 
+        }
+
+        /* 2. PRELOADER SCREEN */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #050507; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
         .loader-circle { width: 100px; height: 100px; border: 4px solid #1a1a24; border-top: 4px solid #ffaa00; border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 20px rgba(255, 170, 0, 0.2); }
         .loader-text { margin-top: 20px; font-size: 24px; font-weight: bold; color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.5); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* 3. 18+ AGE GATE WITH BLUR */
         #age-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 5, 7, 0.85); z-index: 9998; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
         .age-gate-box { background: linear-gradient(135deg, #14141f 0%, #0d0d14 100%); border: 2px solid #ffaa00; padding: 40px; border-radius: 16px; text-align: center; box-shadow: 0 0 40px rgba(255, 170, 0, 0.3); max-width: 450px; width: 90%; }
         .age-gate-box h2 { color: #ffaa00; font-weight: bold; margin-bottom: 15px; }
@@ -19,30 +31,83 @@
         .btn-enter:hover { background-color: #ffffff; box-shadow: 0 0 15px #ffffff; }
         .btn-exit { background-color: transparent; color: #ff3333; font-weight: bold; padding: 12px 30px; border-radius: 8px; border: 2px solid #ff3333; transition: 0.3s; }
         .btn-exit:hover { background-color: #ff3333; color: #fff; box-shadow: 0 0 15px #ff3333; }
+        
+        /* 4. NAVBAR & PREMIUM BRAND */
         .navbar { background: rgba(13, 13, 20, 0.8) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 170, 0, 0.2); }
         .navbar-brand { font-weight: 900; letter-spacing: 1px; font-size: 26px; }
         .brand-premium { background: linear-gradient(90deg, #ff9900, #ffcc00); color: #000000; padding: 3px 10px; border-radius: 6px; margin-left: 6px; box-shadow: 0 0 15px rgba(255, 153, 0, 0.5); }
-        .category-bar { background-color: #0d0d14; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); overflow-x: auto; white-space: nowrap; }
-        .category-btn { background-color: #161622; color: #aaaaaa; border: 1px solid rgba(255,255,255,0.05); padding: 8px 20px; margin-right: 10px; border-radius: 20px; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.3s; cursor: pointer; }
-        .category-btn:hover, .category-btn.active { background-color: #ffaa00; color: #000; box-shadow: 0 0 15px rgba(255, 170, 0, 0.4); border-color: #ffaa00; }
-        .video-card { background: #0f0f17; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden; margin-bottom: 30px; position: relative; animation: float 4s ease-in-out infinite; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s; }
+        
+        /* 5. SEARCH BAR WITH NEON GLOW */
+        .search-section { max-width: 600px; margin: 30px auto; padding: 0 15px; }
+        .search-inner { position: relative; border-radius: 30px; padding: 2px; background: linear-gradient(90deg, #ffaa00, #00ffcc); box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+        .search-input { width: 100%; border: none; padding: 12px 25px; background: #0f0f17; color: #fff; border-radius: 30px; outline: none; font-size: 16px; }
+        .search-inner i { position: absolute; right: 20px; top: 15px; color: #00ffcc; font-size: 18px; }
+
+        /* 6. CATEGORY BAR */
+        .category-bar { background-color: #0d0d14; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); overflow-x: auto; white-space: nowrap; text-align: center; }
+        .category-btn { background-color: #161622; color: #aaaaaa; border: 1px solid rgba(255,255,255,0.05); padding: 8px 25px; margin-right: 10px; border-radius: 20px; font-size: 14px; transition: 0.3s; cursor: pointer; }
+        .category-btn:hover, .category-btn.active { background-color: #ffaa00; color: #000; box-shadow: 0 0 15px rgba(255, 170, 0, 0.4); border-color: #ffaa00; font-weight: bold; }
+        
+        /* 7. FLOATING VIDEO CARDS WITH WATER GLOW */
+        .video-card { background: #0f0f17; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; overflow: hidden; margin-bottom: 30px; position: relative; animation: float 4s ease-in-out infinite; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
         .video-card:hover { animation-play-state: paused; transform: scale(1.04) translateY(-5px) !important; border-color: #00ffcc; box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), 0 0 50px rgba(255, 170, 0, 0.2); }
+        
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        /* Video Overlays (Badges) */
+        .thumb-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; cursor: pointer; z-index: 2; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease; }
+        .play-btn { width: 60px; height: 60px; background: rgba(255, 170, 0, 0.9); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 170, 0, 0.6); transition: 0.3s; }
+        .play-btn i { color: #000; font-size: 22px; margin-left: 4px; }
+        .video-card:hover .play-btn { transform: scale(1.1); background: #ffffff; box-shadow: 0 0 25px #ffffff; }
+        
+        .badge-hd { position: absolute; top: 12px; left: 12px; background: linear-gradient(90deg, #00f2fe, #4facfe); color: #fff; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; z-index: 3; }
+        .badge-time { position: absolute; bottom: 12px; right: 12px; background: rgba(0, 0, 0, 0.8); color: #fff; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px; z-index: 3; }
+
+        /* Video Info & Interactive Buttons */
         .video-info { padding: 15px; background: #0f0f17; }
-        .video-title { font-size: 16px; font-weight: bold; color: #ffffff; margin-bottom: 8px; }
-        .video-meta { font-size: 13px; color: #77778e; }
-        .ads-banner { background: #0d0d14; border: 1px dashed #ffaa00; text-align: center; padding: 25px; margin: 30px 0; color: #ffaa00; border-radius: 8px; box-shadow: 0 0 15px rgba(255, 170, 0, 0.1); }
+        .video-title { font-size: 15px; font-weight: bold; color: #ffffff; line-height: 1.4; height: 42px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 10px; }
+        .video-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: 5px; }
+        .action-btn { background: none; border: none; color: #6c757d; font-size: 13px; transition: 0.2s; cursor: pointer; }
+        .action-btn:hover, .action-btn.active-like { color: #00ffcc; text-shadow: 0 0 10px rgba(0,255,204,0.4); }
+        .action-btn.active-dislike { color: #ff3333; text-shadow: 0 0 10px rgba(255,51,51,0.4); }
+        .video-meta { font-size: 12px; color: #5c5c70; font-weight: 500; }
+
+        .ads-banner { background: #0d0d14; border: 1px dashed #ffaa00; text-align: center; padding: 20px; margin: 30px 0; color: #ffaa00; border-radius: 8px; box-shadow: 0 0 15px rgba(255, 170, 0, 0.1); }
+
+        /* 8. LIVE NOTIFICATION TOAST */
+        #notification-toast { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #10101a 0%, #07070a 100%); border: 1px solid #00ffcc; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); z-index: 9995; display: flex; align-items: center; gap: 12px; transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #notification-toast i { color: #00ffcc; font-size: 20px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
+    <!-- 1. PRELOADER SCREEN -->
     <div id="preloader"><div class="loader-circle"></div><div class="loader-text" id="loader-percentage">0%</div></div>
+    
+    <!-- 2. 18+ AGE GATE -->
     <div id="age-gate"><div class="age-gate-box"><h2>⚠️ WARNING: 18+ ONLY</h2><p class="text-muted">This website contains adult content. You must be 18 years or older to enter.</p><hr style="border-color: rgba(255,170,0,0.2);"><div class="mt-4"><button class="btn-enter" onclick="enterSite()">ENTER (18+)</button><button class="btn-exit" onclick="exitSite()">EXIT</button></div></div></div>
 
+    <!-- LIVE NOTIFICATION TOAST -->
+    <div id="notification-toast">
+        <i class="fa-solid fa-circle-bolt"></i>
+        <div id="notification-text" style="font-size: 13px; font-weight: 500;"></div>
+    </div>
+
+    <!-- 3. NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top"><div class="container"><a class="navbar-brand" href="#">කාම<span class="brand-premium">YAHANA AI</span></a></div></nav>
 
+    <!-- 4. GLOWING SEARCH BAR -->
+    <div class="search-section">
+        <div class="search-inner">
+            <input type="text" id="search-input" class="search-input" placeholder="Search premium videos here..." onkeyup="searchVideos()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+    </div>
+
+    <!-- 5. CATEGORY BAR -->
     <div class="category-bar">
         <div class="container">
             <button class="category-btn active" onclick="filterVideos('all', this)">All Videos</button>
@@ -52,22 +117,23 @@
         </div>
     </div>
 
-    <div class="container my-5">
+    <div class="container my-4">
         <div class="ads-banner">[ ADSTERRA / EXOCLICK BANNER PLACEHOLDER ]</div>
-        <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px;">⚡ AI Recommended Videos</h3>
+        <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
         
-        <!-- මෙතනට තමයි Google Sheet එකෙන් වීඩියෝ ඔටෝමැටිකලි ලෝඩ් වෙන්නේ -->
+        <!-- VIDEO GRID -->
         <div class="row" id="video-grid"></div>
     </div>
 
     <script>
-        // 🛑 මෙතනට උඹේ GOOGLE SHEET ID එක දාන්න 🛑
+        // 🛑 උඹේ GOOGLE SHEET ID එක මෙතන තියෙනවා මචං 🛑
         const SPREADSHEET_ID = '19fRcgFz3BE41d8gREOzR7mOgl53d6SYyWcY3iyuO4PI'; 
-        
         const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
+        let allVideoData = []; // සෙවුම් සඳහා දත්ත තබා ගැනීමට
+
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. Loading Screen Counter
+            // 1. Loading screen logic
             let percentageText = document.getElementById("loader-percentage");
             let preloader = document.getElementById("preloader");
             let ageGate = document.getElementById("age-gate");
@@ -77,59 +143,113 @@
                 if (count > 100) count = 100;
                 percentageText.innerText = count + "%";
                 if (count === 100) { clearInterval(counterInterval); }
-            }, 30);
+            }, 25);
 
-            // 2. Fetch Data From Google Sheet
+            // 2. Fetch Data from sheet
             fetch(SPREADSHEET_URL)
                 .then(res => res.text())
                 .then(data => {
-                    // Google JSON format එක පිරිසිදු කිරීම
                     const jsonData = JSON.parse(data.substring(47, data.length - 2));
-                    const rows = jsonData.table.rows;
-                    let gridHtml = '';
-
-                    rows.forEach((row, index) => {
-                        const title = row.c[0] ? row.c[0].v : 'Untitled Video';
-                        const link = row.c[1] ? row.c[1].v : '#';
-                        const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
-
-                        gridHtml += `
-                            <div class="col-lg-4 col-md-6 video-item ${category}" style="animation-delay: ${index * 0.2}s">
-                                <div class="video-card">
-                                    <div class="video-container">
-                                        <iframe src="${link}" frameborder="0" allowfullscreen></iframe>
-                                    </div>
-                                    <div class="video-info">
-                                        <div class="video-title">${title}</div>
-                                        <div class="video-meta">🟢 ${Math.floor(Math.random() * 10) + 1}K Views • Premium AI</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    document.getElementById('video-grid').innerHTML = gridHtml;
+                    allVideoData = jsonData.table.rows;
+                    renderVideos(allVideoData);
                     
-                    // Loading ඉවර කරලා සයිට් එක පෙන්වීම
                     preloader.style.opacity = "0";
                     setTimeout(() => { preloader.style.display = "none"; ageGate.style.display = "flex"; }, 500);
-                })
-                .catch(err => {
-                    console.error("Error loading videos:", err);
-                    document.getElementById('video-grid').innerHTML = '<p class="text-danger">Failed to load videos. Check Sheet ID or Publish settings.</p>';
-                    preloader.style.display = "none";
-                    ageGate.style.display = "flex";
+                    
+                    // සයිට් එකට ඇතුළු වුණාම Live Alerts පටන් ගැන්ම
+                    setTimeout(startLiveNotifications, 5000);
                 });
         });
 
-        function enterSite() {
-            let ageGate = document.getElementById("age-gate");
-            ageGate.style.opacity = "0";
-            setTimeout(() => { ageGate.style.display = "none"; }, 400);
+        // VIDEO RENDER LOGIC
+        function renderVideos(rows) {
+            let gridHtml = '';
+            rows.forEach((row, index) => {
+                const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
+                const link = row.c[1] ? row.c[1].v : '#';
+                const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
+                const thumb = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video';
+                const duration = row.c[4] ? row.c[4].v : 'HD'; // 5 වෙනි තීරුවෙන් වෙලාව ගනී
+
+                // Fake Views & Likes සාදාගැනීම
+                const randomViews = Math.floor(Math.random() * 45) + 5;
+                const randomLikes = Math.floor(randomViews * 12) + 42;
+
+                gridHtml += `
+                    <div class="col-lg-4 col-md-6 video-item ${category}">
+                        <div class="video-card">
+                            <div class="video-container">
+                                <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
+                                <div class="badge-time">${duration}</div>
+                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}')">
+                                    <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <iframe id="player-${index}" src="" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">${title}</div>
+                                <div class="video-meta"><i class="fa-solid fa-eye me-1"></i>${randomViews}K Views</div>
+                                <div class="video-actions">
+                                    <button class="action-btn" onclick="toggleLike(this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>${randomLikes}</span></button>
+                                    <button class="action-btn" onclick="toggleDislike(this)"><i class="fa-solid fa-thumbs-down"></i></button>
+                                    <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('video-grid').innerHTML = gridHtml || '<p class="text-center text-muted my-4">No videos found matching your request.</p>';
         }
 
-        function exitSite() { window.location.href = "https://www.google.com"; }
+        // REAL-TIME SEARCH LOGIC
+        function searchVideos() {
+            let query = document.getElementById('search-input').value.toLowerCase();
+            let items = document.querySelectorAll('.video-item');
+            
+            items.forEach(item => {
+                let title = item.querySelector('.video-title').innerText.toLowerCase();
+                if(title.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
 
+        // PLAY VIDEO TRIGGER
+        function playVideo(videoUrl, playerId, thumbId) {
+            document.getElementById(playerId).src = videoUrl;
+            document.getElementById(thumbId).style.opacity = '0';
+            setTimeout(() => { document.getElementById(thumbId).style.display = 'none'; }, 300);
+        }
+
+        // INTERACTIVE BUTTON LOGICS
+        function toggleLike(btn) {
+            let countSpan = btn.querySelector('span');
+            let currentCount = parseInt(countSpan.innerText);
+            if(btn.classList.contains('active-like')) {
+                btn.classList.remove('active-like'); countSpan.innerText = currentCount - 1;
+            } else {
+                btn.classList.add('active-like'); countSpan.innerText = currentCount + 1;
+                btn.nextElementSibling.classList.remove('active-dislike');
+            }
+        }
+
+        function toggleDislike(btn) {
+            if(btn.classList.contains('active-dislike')) { btn.classList.remove('active-dislike'); } 
+            else { btn.classList.add('active-dislike'); btn.previousElementSibling.classList.remove('active-like'); }
+        }
+
+        function shareVideo(title, url) {
+            if (navigator.share) {
+                navigator.share({ title: title, url: url }).catch(console.error);
+            } else {
+                alert("Link copied to clipboard! Share it with friends.");
+            }
+        }
+
+        // CATEGORY FILTER
         function filterVideos(category, buttonElement) {
             let buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -140,6 +260,43 @@
                 if (category === 'all') { item.style.display = 'block'; } 
                 else { item.style.display = item.classList.contains(category) ? 'block' : 'none'; }
             });
+            document.getElementById('search-input').value = ''; // Reset search on category change
+        }
+
+        // AGE GATE TRIGGERS
+        function enterSite() {
+            let ageGate = document.getElementById("age-gate");
+            ageGate.style.opacity = "0";
+            setTimeout(() => { ageGate.style.display = "none"; }, 400);
+        }
+        function exitSite() { window.location.href = "https://www.google.com"; }
+
+        // LIVE FAKE NOTIFICATIONS ALERTS SYSTEM
+        function startLiveNotifications() {
+            const locations = ['Colombo', 'Kandy', 'Galle', 'Gampaha', 'Negombo', 'Kurunegala', 'Jaffna', 'Matara', 'Kalutara'];
+            const actions = ['unlocked Premium Mode!', 'is watching Live right now.', 'liked a Sri Lankan Leaked video.', 'downloaded full HD pack.'];
+            const toast = document.getElementById('notification-toast');
+            const toastText = document.getElementById('notification-text');
+
+            setInterval(() => {
+                let randomLoc = locations[Math.floor(Math.random() * locations.length)];
+                let randomAct = actions[Math.floor(Math.random() * actions.length)];
+                let randomUsers = Math.floor(Math.random() * 150) + 200;
+
+                // වරින් වර වෙනස් ඇලර්ට් පෙන්වීම
+                if(Math.random() > 0.5) {
+                    toastText.innerHTML = `Someone from <b class="text-warning">${randomLoc}</b> ${randomAct}`;
+                } else {
+                    toastText.innerHTML = `<b class="text-info">${randomUsers} users</b> are browsing this section right now.`;
+                }
+
+                // Popup Animation
+                toast.style.transform = 'translateY(0%)';
+                setTimeout(() => {
+                    toast.style.transform = 'translateY(150%)';
+                }, 4000); // තත්පර 4ක් පේන්න තබා ගනී
+
+            }, 12000); // හැම තත්පර 12කටම සැරයක් අලුත් එකක් මතුවේ
         }
     </script>
 </body>
