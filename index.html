@@ -243,25 +243,32 @@
         const duration = row.c[3] ? row.c[3].v : 'HD';
         const videoId = "card_" + index; 
         
-        gridHtml += `
-            <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
-                <div class="video-card" id="card-${videoId}">
-                    <div class="video-container">
-                        <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
-                        <div class="badge-time">${duration}</div>
-                        <!-- මෙතැනදී අපි දැන් customThumb එක භාවිතා කරනවා -->
-                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${customThumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
-                            <div class="play-btn"><i class="fa-solid fa-play"></i></div>
-                        </div>
-                        <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
-                    </div>
-                    <!-- ඉතිරි කොටස පෙර පරිදිම -->
+        // renderVideos function එක තුළ ඇති gridHtml එක මෙසේ වෙනස් කරන්න:
+gridHtml += `
+    <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
+        <div class="video-card" id="card-${videoId}">
+            <div class="video-container">
+                <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
+                <div class="badge-time">${duration}</div>
+                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${customThumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                    <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                 </div>
-            </div>`;
-    });
-    document.getElementById('video-grid').innerHTML = gridHtml || '<p>No videos found.</p>';
-    syncAllStats(); 
-}
+                <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
+            </div>
+            
+            <!-- මෙන්න මේ කොටස තමයි අතුරුදහන් වී ඇත්තේ -->
+            <div class="video-info">
+                <div class="video-title">${title}</div>
+                <div class="video-actions">
+                    <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up"></i> <span>0</span></button>
+                    <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down"></i> <span>0</span></button>
+                    <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+                <div class="video-meta mt-2">Views: <span class="v-count">0</span></div>
+            </div>
+        </div>
+    </div>`;
+
 
 
         function playVideo(videoUrl, playerId, thumbId, videoId) {
