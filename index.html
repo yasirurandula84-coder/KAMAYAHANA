@@ -167,15 +167,16 @@
         const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
         const link = row.c[1] ? row.c[1].v : '#';
         
-        // Category ටික හදාගන්න කොටස
+        // මෙතනදී category එක split කරලා classes ටික ගන්නවා
         const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
         const categoryArray = rawCategory.split(',').map(c => c.trim());
-        const categoryClasses = categoryArray.join(' '); // මේක තමයි class එකට දෙන්න ඕන
+        const categoryClasses = categoryArray.join(' ');
         
         const duration = row.c[3] ? row.c[3].v : 'HD';
         const thumb = getDoodStreamThumbnail(link);
         const videoId = "card_" + index; 
         
+        // මෙතන "${categoryClasses}" ලෙස වෙනස් කළා
         gridHtml += `
             <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
                 <div class="video-card" id="card-${videoId}">
@@ -272,7 +273,7 @@
         if (category === 'all') { 
             item.style.display = 'block'; 
         } else {
-            // මෙතනදී අපි බලනවා item එකේ ඒ class එක තියෙනවද කියලා
+            // item එකට අදාළ class එක තියෙනවද කියලා බලනවා
             item.style.display = item.classList.contains(category) ? 'block' : 'none';
         }
     });
