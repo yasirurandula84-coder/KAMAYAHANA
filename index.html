@@ -215,26 +215,33 @@
                 });
         });
 
-        // 🛠️ FIX: playmogo.com ඇතුළු ඕනෑම DoodStream Alternative Domain එකකින් ID එක නිවැරදිව වෙන් කරගන්නා ලෙස Regex එක වෙනස් කලා.
-        function getDoodStreamThumbnail(videoUrl) {
-            let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
-            let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
-            
-            if (doodIdMatch && doodIdMatch[1]) {
-                let videoId = doodIdMatch[1];
-                thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
-            }
-            return thumb;
-        }
+        // 1. Thumbnail එක ලබාගන්නා ශ්‍රිතය යාවත්කාලීන කිරීම
+function getCustomOrDoodThumbnail(videoUrl, sheetThumb) {
+    // ශීට් එකේ ලින්ක් එකක් තියෙනවා නම් එය භාවිතා කරන්න, නැත්නම් DoodStream එකෙන් ගන්න
+    if (sheetThumb && sheetThumb.trim() !== "") {
+        return sheetThumb;
+    }
+    
+    let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
+    let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
+    
+    if (doodIdMatch && doodIdMatch[1]) {
+        let videoId = doodIdMatch[1];
+        thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
+    }
+    return thumb;
+}
 
-        function renderVideos(rows) {
+// 2. renderVideos ශ්‍රිතය තුළ මෙම කොටස වෙනස් කරන්න
+function renderVideos(rows) {
     let gridHtml = '';
     rows.forEach((row, index) => {
         const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
         const link = row.c[1] ? row.c[1].v : '#';
         
-        // පින්තූරයේ ලින්ක් එක Sheet එකේ 5 වන තීරුවෙන් (Index 4) ලබාගන්නා ආකාරය
-        const customThumb = row.c[4] ? row.c[4].v : getDoodStreamThumbnail(link);
+        // ශීට් එකේ 5 වන තීරුවේ (index 4) Thumbnail ලින්ක් එක තිබේ නම් එය ගන්න
+        const sheetThumb = row.c[4] ? row.c[4].v : "";
+        const finalThumb = getCustomOrDoodThumbnail(link, sheetThumb);
         
         const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
         const categoryArray = rawCategory.split(',').map(c => c.trim());
@@ -243,32 +250,33 @@
         const duration = row.c[3] ? row.c[3].v : 'HD';
         const videoId = "card_" + index; 
         
-        // renderVideos function එක තුළ ඇති gridHtml එක මෙසේ වෙනස් කරන්න:
-gridHtml += `
-    <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
-        <div class="video-card" id="card-${videoId}">
-            <div class="video-container">
-                <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
-                <div class="badge-time">${duration}</div>
-                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${customThumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
-                    <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        gridHtml += `
+            <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
+                <div class="video-card" id="card-${videoId}">
+                    <div class="video-container">
+                        <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
+                        <div class="badge-time">${duration}</div>
+                        <!-- මෙතැනදී finalThumb භාවිතා වේ -->
+                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${finalThumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                            <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${title}</div>
+                        <div class="video-meta"><i class="fa-solid fa-eye me-1"></i><span class="v-count">0</span> Views</div>
+                        <div class="video-actions">
+                            <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>0</span></button>
+                            <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down me-1"></i><span>0</span></button>
+                            <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                        </div>
+                    </div>
                 </div>
-                <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
-            </div>
-            
-            <!-- මෙන්න මේ කොටස තමයි අතුරුදහන් වී ඇත්තේ -->
-            <div class="video-info">
-                <div class="video-title">${title}</div>
-                <div class="video-actions">
-                    <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up"></i> <span>0</span></button>
-                    <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down"></i> <span>0</span></button>
-                    <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i></button>
-                </div>
-                <div class="video-meta mt-2">Views: <span class="v-count">0</span></div>
-            </div>
-        </div>
-    </div>`;
-
+            </div>`;
+    });
+    document.getElementById('video-grid').innerHTML = gridHtml || '<p>No videos found.</p>';
+    syncAllStats(); 
+}
 
 
         function playVideo(videoUrl, playerId, thumbId, videoId) {
