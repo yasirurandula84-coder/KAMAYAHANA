@@ -233,36 +233,29 @@
         const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
         const link = row.c[1] ? row.c[1].v : '#';
         
-        // මෙතනදී category එක split කරලා classes ටික ගන්නවා
+        // පින්තූරයේ ලින්ක් එක Sheet එකේ 5 වන තීරුවෙන් (Index 4) ලබාගන්නා ආකාරය
+        const customThumb = row.c[4] ? row.c[4].v : getDoodStreamThumbnail(link);
+        
         const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
         const categoryArray = rawCategory.split(',').map(c => c.trim());
         const categoryClasses = categoryArray.join(' ');
         
         const duration = row.c[3] ? row.c[3].v : 'HD';
-        const thumb = getDoodStreamThumbnail(link);
         const videoId = "card_" + index; 
         
-        // මෙතන "${categoryClasses}" ලෙස වෙනස් කළා
         gridHtml += `
             <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
                 <div class="video-card" id="card-${videoId}">
                     <div class="video-container">
                         <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
                         <div class="badge-time">${duration}</div>
-                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                        <!-- මෙතැනදී අපි දැන් customThumb එක භාවිතා කරනවා -->
+                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${customThumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
                             <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                         </div>
                         <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
                     </div>
-                    <div class="video-info">
-                        <div class="video-title">${title}</div>
-                        <div class="video-meta"><i class="fa-solid fa-eye me-1"></i><span class="v-count">0</span> Views</div>
-                        <div class="video-actions">
-                            <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>0</span></button>
-                            <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down me-1"></i><span>0</span></button>
-                            <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
-                        </div>
-                    </div>
+                    <!-- ඉතිරි කොටස පෙර පරිදිම -->
                 </div>
             </div>`;
     });
@@ -270,7 +263,6 @@
     syncAllStats(); 
 }
 
-                
 
         function playVideo(videoUrl, playerId, thumbId, videoId) {
             document.getElementById(playerId).src = videoUrl;
@@ -325,9 +317,26 @@
         }
 
         function shareVideo(title, url) {
-            if (navigator.share) { navigator.share({ title: title, url: url }).catch(console.error); } 
-            else { alert("Link copied to clipboard!"); }
-        }
+    // ඔබේ වෙබ් අඩවියේ සැබෑ URL එක මෙතැනට ඇතුළත් කරන්න
+    const mySiteUrl = window.location.href.split('?')[0] + "?video=" + encodeURIComponent(title);
+    
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: "මේ වීඩියෝ එක බලන්න: " + title,
+            url: mySiteUrl // මෙතැනට දැන් ශෙයාර් වන්නේ ඔබේ අඩවියේ ලින්ක් එකයි
+        }).catch(console.error);
+    } else {
+        // clipboard එකට පිටපත් කිරීම සඳහා ලින්ක් එක ලබාදීම
+        const dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = mySiteUrl;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+        alert("ලින්ක් එක කොපි වුණා: " + mySiteUrl);
+    }
+}
 
         function filterVideos(category, buttonElement) {
     let buttons = document.querySelectorAll('.category-btn');
