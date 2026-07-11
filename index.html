@@ -166,7 +166,9 @@
             rows.forEach((row, index) => {
                 const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
                 const link = row.c[1] ? row.c[1].v : '#';
-                const category = row.c[2] ? row.c[2].v.toLowerCase().trim() : 'all';
+                const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
+                const categoryArray = rawCategory.split(',').map(c => c.trim());
+                const categoryClasses = categoryArray.join(' ');
                 const duration = row.c[3] ? row.c[3].v : 'HD';
                 const thumb = getDoodStreamThumbnail(link);
             // මේ වෙනස කරන්න
@@ -261,17 +263,21 @@ const videoId = "card_" + index; // දාන්න: "card_0", "card_1", "card_2
         }
 
         function filterVideos(category, buttonElement) {
-            let buttons = document.querySelectorAll('.category-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            buttonElement.classList.add('active');
+    let buttons = document.querySelectorAll('.category-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    buttonElement.classList.add('active');
 
-            let items = document.querySelectorAll('.video-item');
-            items.forEach(item => {
-                if (category === 'all') { item.style.display = 'block'; } 
-                else { item.style.display = item.classList.contains(category) ? 'block' : 'none'; }
-            });
-            document.getElementById('search-input').value = ''; 
+    let items = document.querySelectorAll('.video-item');
+    items.forEach(item => {
+        if (category === 'all') { 
+            item.style.display = 'block'; 
+        } else {
+            // මෙතනදී අපි බලනවා item එකේ ඒ class එක තියෙනවද කියලා
+            item.style.display = item.classList.contains(category) ? 'block' : 'none';
         }
+    });
+    document.getElementById('search-input').value = ''; 
+}
 
         // Age Gate logic
         function enterSite() {
