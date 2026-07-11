@@ -19,8 +19,7 @@
         .loader-text { margin-top: 20px; font-size: 24px; font-weight: bold; color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.5); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* සයිට් එකේ පෙනුම වැඩි කිරීමට මෙම CSS එකට අලුතින් එක් කරන්න */
-.bg-bubbles {
+        .bg-bubbles {
     position: fixed;
     top: 0;
     left: 0;
@@ -28,19 +27,33 @@
     height: 100%;
     z-index: -1;
     overflow: hidden;
-    background: radial-gradient(circle at center, #1a1a2e 0%, #060608 100%); /* පසුබිමට පොඩි ගැඹුරක් */
+    background: linear-gradient(180deg, #0f0f17 0%, #060608 100%); /* වඩා හොඳ gradient එකක් */
 }
 
 .bubble {
     position: absolute;
     bottom: -100px;
-    background: rgba(255, 170, 0, 0.08); /* Glow එක අඩු කළා */
+    width: 40px; /* බුබුලේ ප්‍රමාණය */
+    height: 40px;
+    background: rgba(255, 170, 0, 0.1); /* රන්වන් පාටින් දිලිසෙන ලෙස */
     border-radius: 50%;
     animation: rise 15s infinite ease-in;
-    pointer-events: none; /* Mouse එකට බාධාවක් වෙන්නේ නැහැ */
+    pointer-events: none;
 }
 
+/* බුබුලු විවිධ ප්‍රමාණවලින් සහ ස්ථානවලින් මතුවීමට */
+.bubble:nth-child(1) { left: 10%; width: 60px; height: 60px; animation-duration: 12s; }
+.bubble:nth-child(2) { left: 25%; width: 20px; height: 20px; animation-duration: 18s; animation-delay: 2s; }
+.bubble:nth-child(3) { left: 45%; width: 50px; height: 50px; animation-duration: 14s; }
+.bubble:nth-child(4) { left: 65%; width: 30px; height: 30px; animation-duration: 20s; }
+.bubble:nth-child(5) { left: 85%; width: 70px; height: 70px; animation-duration: 10s; }
+.bubble:nth-child(6) { left: 50%; width: 25px; height: 25px; animation-duration: 16s; }
 
+@keyframes rise {
+    0% { transform: translateY(0); opacity: 0; }
+    50% { opacity: 0.4; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+}
         
         #age-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 5, 7, 0.85); z-index: 9998; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
         .age-gate-box { background: linear-gradient(135deg, #14141f 0%, #0d0d14 100%); border: 2px solid #ffaa00; padding: 40px; border-radius: 16px; text-align: center; box-shadow: 0 0 40px rgba(255, 170, 0, 0.3); max-width: 450px; width: 90%; }
@@ -117,6 +130,15 @@
 </head>
 <body>
 
+        <div class="bg-bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+
     <div id="preloader"><div class="loader-circle"></div><div class="loader-text" id="loader-percentage">0%</div></div>
     <div id="age-gate"><div class="age-gate-box"><h2>⚠️ WARNING: 18+ ONLY</h2><p class="text-muted">This website contains adult content. You must be 18 years or older to enter.</p><hr style="border-color: rgba(255,170,0,0.2);"><div class="mt-4"><button class="btn-enter" onclick="enterSite()">ENTER (18+)</button><button class="btn-exit" onclick="exitSite()">EXIT</button></div></div></div>
 
@@ -148,15 +170,6 @@
         <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
         <div class="row" id="video-grid"></div>
     </div>
-
-    <div class="bg-bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-</div>
 
     <script>
         const firebaseConfig = {
