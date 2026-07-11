@@ -162,46 +162,46 @@
         }
 
         function renderVideos(rows) {
-            let gridHtml = '';
-            rows.forEach((row, index) => {
-                const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
-                const link = row.c[1] ? row.c[1].v : '#';
-                const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
-                const categoryArray = rawCategory.split(',').map(c => c.trim());
-                const categoryClasses = categoryArray.join(' ');
-                const duration = row.c[3] ? row.c[3].v : 'HD';
-                const thumb = getDoodStreamThumbnail(link);
-            // මේ වෙනස කරන්න
-const videoId = "card_" + index; // දාන්න: "card_0", "card_1", "card_2" ...
-                
-                gridHtml += `
-                    <div class="col-lg-4 col-md-6 video-item ${category}">
-                        <div class="video-card" id="card-${videoId}">
-                            <div class="video-container">
-                                <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
-                                <div class="badge-time">${duration}</div>
-                                <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
-                                    <div class="play-btn"><i class="fa-solid fa-play"></i></div>
-                                </div>
-                                <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
-                            </div>
-                            <div class="video-info">
-                                <div class="video-title">${title}</div>
-                                <div class="video-meta"><i class="fa-solid fa-eye me-1"></i><span class="v-count">0</span> Views</div>
-                                <div class="video-actions">
-                                    <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>0</span></button>
-                                    <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down me-1"></i><span>0</span></button>
-                                    <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
-                                </div>
-                            </div>
+    let gridHtml = '';
+    rows.forEach((row, index) => {
+        const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
+        const link = row.c[1] ? row.c[1].v : '#';
+        
+        // Category ටික හදාගන්න කොටස
+        const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
+        const categoryArray = rawCategory.split(',').map(c => c.trim());
+        const categoryClasses = categoryArray.join(' '); // මේක තමයි class එකට දෙන්න ඕන
+        
+        const duration = row.c[3] ? row.c[3].v : 'HD';
+        const thumb = getDoodStreamThumbnail(link);
+        const videoId = "card_" + index; 
+        
+        gridHtml += `
+            <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
+                <div class="video-card" id="card-${videoId}">
+                    <div class="video-container">
+                        <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
+                        <div class="badge-time">${duration}</div>
+                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                            <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                         </div>
-                    </div>`;
-            });
-            document.getElementById('video-grid').innerHTML = gridHtml || '<p>No videos found.</p>';
-            
-            // දැන් මෙතන දත්ත load කරන ෆන්ක්ෂන් එක call කරන්න
-            syncAllStats(); 
-        }
+                        <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${title}</div>
+                        <div class="video-meta"><i class="fa-solid fa-eye me-1"></i><span class="v-count">0</span> Views</div>
+                        <div class="video-actions">
+                            <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>0</span></button>
+                            <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down me-1"></i><span>0</span></button>
+                            <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    });
+    document.getElementById('video-grid').innerHTML = gridHtml || '<p>No videos found.</p>';
+    syncAllStats(); 
+}
 
                 
 
