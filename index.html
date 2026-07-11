@@ -215,49 +215,41 @@
                 });
         });
 
-        // 1. Thumbnail එක ලබාගන්නා ශ්‍රිතය යාවත්කාලීන කිරීම
-function getCustomOrDoodThumbnail(videoUrl, sheetThumb) {
-    // ශීට් එකේ ලින්ක් එකක් තියෙනවා නම් එය භාවිතා කරන්න, නැත්නම් DoodStream එකෙන් ගන්න
-    if (sheetThumb && sheetThumb.trim() !== "") {
-        return sheetThumb;
-    }
-    
-    let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
-    let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
-    
-    if (doodIdMatch && doodIdMatch[1]) {
-        let videoId = doodIdMatch[1];
-        thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
-    }
-    return thumb;
-}
+        // 🛠️ FIX: playmogo.com ඇතුළු ඕනෑම DoodStream Alternative Domain එකකින් ID එක නිවැරදිව වෙන් කරගන්නා ලෙස Regex එක වෙනස් කලා.
+        function getDoodStreamThumbnail(videoUrl) {
+            let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
+            let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
+            
+            if (doodIdMatch && doodIdMatch[1]) {
+                let videoId = doodIdMatch[1];
+                thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
+            }
+            return thumb;
+        }
 
-// 2. renderVideos ශ්‍රිතය තුළ මෙම කොටස වෙනස් කරන්න
-function renderVideos(rows) {
+        function renderVideos(rows) {
     let gridHtml = '';
     rows.forEach((row, index) => {
         const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
         const link = row.c[1] ? row.c[1].v : '#';
         
-        // ශීට් එකේ 5 වන තීරුවේ (index 4) Thumbnail ලින්ක් එක තිබේ නම් එය ගන්න
-        const sheetThumb = row.c[4] ? row.c[4].v : "";
-        const finalThumb = getCustomOrDoodThumbnail(link, sheetThumb);
-        
+        // මෙතනදී category එක split කරලා classes ටික ගන්නවා
         const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
         const categoryArray = rawCategory.split(',').map(c => c.trim());
         const categoryClasses = categoryArray.join(' ');
         
         const duration = row.c[3] ? row.c[3].v : 'HD';
+        const thumb = getDoodStreamThumbnail(link);
         const videoId = "card_" + index; 
         
+        // මෙතන "${categoryClasses}" ලෙස වෙනස් කළා
         gridHtml += `
             <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
                 <div class="video-card" id="card-${videoId}">
                     <div class="video-container">
                         <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
                         <div class="badge-time">${duration}</div>
-                        <!-- මෙතැනදී finalThumb භාවිතා වේ -->
-                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${finalThumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
                             <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                         </div>
                         <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
@@ -278,6 +270,7 @@ function renderVideos(rows) {
     syncAllStats(); 
 }
 
+                
 
         function playVideo(videoUrl, playerId, thumbId, videoId) {
             document.getElementById(playerId).src = videoUrl;
@@ -353,6 +346,7 @@ function renderVideos(rows) {
     }
 }
 
+
         function filterVideos(category, buttonElement) {
     let buttons = document.querySelectorAll('.category-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
@@ -418,3 +412,5 @@ function renderVideos(rows) {
 
 </body>
 </html>
+
+Menna me code Eka mata sheet eken thumbnail Eka change karanna puluwan widiyata hdnn
