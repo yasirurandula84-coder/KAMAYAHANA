@@ -66,6 +66,43 @@
         #notification-toast { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #10101a 0%, #07070a 100%); border: 1px solid #00ffcc; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); z-index: 9995; display: flex; align-items: center; gap: 12px; transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #notification-toast i { color: #00ffcc; font-size: 20px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        /* පසුබිමේ පාවෙන බුබුලු සඳහා */
+.bg-bubbles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* සයිට් එකේ අනිත් දේවලට පිටුපසින් තියන්න */
+    overflow: hidden;
+}
+
+.bubble {
+    position: absolute;
+    bottom: -100px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 170, 0, 0.1); /* රන්වන් පාට ලා පැහැය */
+    border-radius: 50%;
+    animation: rise 15s infinite ease-in;
+}
+
+/* විවිධ සයිස් සහ වේගයන් */
+.bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 8s; }
+.bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 12s; animation-delay: 2s; }
+.bubble:nth-child(3) { width: 50px; height: 50px; left: 35%; animation-duration: 10s; }
+.bubble:nth-child(4) { width: 30px; height: 30px; left: 50%; animation-duration: 15s; animation-delay: 4s; }
+.bubble:nth-child(5) { width: 60px; height: 60px; left: 65%; animation-duration: 9s; }
+.bubble:nth-child(6) { width: 25px; height: 25px; left: 80%; animation-duration: 14s; }
+
+@keyframes rise {
+    0% { transform: translateY(0); opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+}
+  
+    
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -104,6 +141,15 @@
         <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
         <div class="row" id="video-grid"></div>
     </div>
+
+    <div class="bg-bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
 
     <script>
         const firebaseConfig = {
