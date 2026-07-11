@@ -8,54 +8,24 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { 
-    background-color: transparent; /* මෙතන මාරු කරන්න */
-    color: #ffffff; 
-    font-family: 'Segoe UI', Roboto, sans-serif; 
-    overflow-x: hidden; 
-}
+        body { background-color: transparent; color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #050507; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
         .loader-circle { width: 100px; height: 100px; border: 4px solid #1a1a24; border-top: 4px solid #ffaa00; border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 20px rgba(255, 170, 0, 0.2); }
         .loader-text { margin-top: 20px; font-size: 24px; font-weight: bold; color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.5); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.bg-bubbles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    overflow: hidden;
-    background: #060608; /* මුළු පිටුවටම කළු පසුබිම මෙතනින් දෙන්න */
-}
-
-.bubble {
-    position: absolute;
-    bottom: -100px;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 170, 0, 0.3); /* 0.1 වෙනුවට 0.3 කරන්න */
-    border-radius: 50%;
-    animation: rise 15s infinite ease-in;
-    pointer-events: none;
-}
-
-/* බුබුලු විවිධ ප්‍රමාණවලින් සහ ස්ථානවලින් මතුවීමට */
-.bubble:nth-child(1) { left: 10%; width: 60px; height: 60px; animation-duration: 12s; }
-.bubble:nth-child(2) { left: 25%; width: 20px; height: 20px; animation-duration: 18s; animation-delay: 2s; }
-.bubble:nth-child(3) { left: 45%; width: 50px; height: 50px; animation-duration: 14s; }
-.bubble:nth-child(4) { left: 65%; width: 30px; height: 30px; animation-duration: 20s; }
-.bubble:nth-child(5) { left: 85%; width: 70px; height: 70px; animation-duration: 10s; }
-.bubble:nth-child(6) { left: 50%; width: 25px; height: 25px; animation-duration: 16s; }
-
-@keyframes rise {
-    0% { transform: translateY(0); opacity: 0; }
-    50% { opacity: 0.4; }
-    100% { transform: translateY(-100vh); opacity: 0; }
-}
+        .bg-bubbles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: #060608; }
+        .bubble { position: absolute; bottom: -100px; width: 40px; height: 40px; background: rgba(255, 170, 0, 0.3); border-radius: 50%; animation: rise 15s infinite ease-in; pointer-events: none; }
+        .bubble:nth-child(1) { left: 10%; width: 60px; height: 60px; animation-duration: 12s; }
+        .bubble:nth-child(2) { left: 25%; width: 20px; height: 20px; animation-duration: 18s; animation-delay: 2s; }
+        .bubble:nth-child(3) { left: 45%; width: 50px; height: 50px; animation-duration: 14s; }
+        .bubble:nth-child(4) { left: 65%; width: 30px; height: 30px; animation-duration: 20s; }
+        .bubble:nth-child(5) { left: 85%; width: 70px; height: 70px; animation-duration: 10s; }
+        .bubble:nth-child(6) { left: 50%; width: 25px; height: 25px; animation-duration: 16s; }
         
-        #age-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 5, 7, 0.85); z-index: 9998; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
+        @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 0.4; } 100% { transform: translateY(-100vh); opacity: 0; } }
+        
+        #age-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 5, 7, 0.85); z-index: 9998; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); }
         .age-gate-box { background: linear-gradient(135deg, #14141f 0%, #0d0d14 100%); border: 2px solid #ffaa00; padding: 40px; border-radius: 16px; text-align: center; box-shadow: 0 0 40px rgba(255, 170, 0, 0.3); max-width: 450px; width: 90%; }
         .age-gate-box h2 { color: #ffaa00; font-weight: bold; margin-bottom: 15px; }
         .btn-enter { background-color: #ffaa00; color: #000; font-weight: bold; padding: 12px 30px; border-radius: 8px; border: none; margin-right: 10px; transition: 0.3s; }
@@ -76,21 +46,8 @@
         .category-btn { background-color: #161622; color: #aaaaaa; border: 1px solid rgba(255,255,255,0.05); padding: 8px 25px; margin-right: 10px; border-radius: 20px; font-size: 14px; transition: 0.3s; cursor: pointer; }
         .category-btn:hover, .category-btn.active { background-color: #ffaa00; color: #000; box-shadow: 0 0 15px rgba(255, 170, 0, 0.4); border-color: #ffaa00; font-weight: bold; }
 
-        .video-card {
-    background: #0f0f17;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 30px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.video-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: #ffaa00; /* Hover කරද්දී රන්වන් පාටින් දිලිසෙනවා */
-    box-shadow: 0 10px 30px rgba(255, 170, 0, 0.15);
-}
-
+        .video-card { background: #0f0f17; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; overflow: hidden; margin-bottom: 30px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .video-card:hover { transform: translateY(-10px) scale(1.02); border-color: #ffaa00; box-shadow: 0 10px 30px rgba(255, 170, 0, 0.15); }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
@@ -110,64 +67,43 @@
         .action-btn.active-dislike { color: #ff3333; text-shadow: 0 0 10px rgba(255,51,51,0.4); }
         .video-meta { font-size: 12px; color: #5c5c70; font-weight: 500; }
 
-        .ads-banner { text-align: center; margin: 30px 0; min-height: 90px; }
         #notification-toast { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #10101a 0%, #07070a 100%); border: 1px solid #00ffcc; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); z-index: 9995; display: flex; align-items: center; gap: 12px; transform: translateY(150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        #notification-toast i { color: #00ffcc; font-size: 20px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-
-
-@keyframes rise {
-    0% { transform: translateY(0); opacity: 0; }
-    50% { opacity: 0.5; }
-    100% { transform: translateY(-100vh); opacity: 0; }
-}
-  
-    
+        #notification-toast i { color: #00ffcc; font-size: 20px; }
     </style>
-
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-        <div class="bg-bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-</div>
+    <div class="bg-bubbles">
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    </div>
 
     <div id="preloader"><div class="loader-circle"></div><div class="loader-text" id="loader-percentage">0%</div></div>
-    <div id="age-gate"><div class="age-gate-box"><h2>⚠️ WARNING: 18+ ONLY</h2><p class="text-muted">This website contains adult content. You must be 18 years or older to enter.</p><hr style="border-color: rgba(255,170,0,0.2);"><div class="mt-4"><button class="btn-enter" onclick="enterSite()">ENTER (18+)</button><button class="btn-exit" onclick="exitSite()">EXIT</button></div></div></div>
+    <div id="age-gate"><div class="age-gate-box"><h2>⚠️ WARNING: 18+ ONLY</h2><p>This website contains adult content. You must be 18+.</p><div class="mt-4"><button class="btn-enter" onclick="enterSite()">ENTER (18+)</button><button class="btn-exit" onclick="exitSite()">EXIT</button></div></div></div>
 
-    <div id="notification-toast">
-        <i class="fa-solid fa-circle-bolt"></i>
-        <div id="notification-text" style="font-size: 13px; font-weight: 500;"></div>
-    </div>
+    <div id="notification-toast"><i class="fa-solid fa-circle-bolt"></i><div id="notification-text" style="font-size: 13px; font-weight: 500;"></div></div>
 
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top"><div class="container"><a class="navbar-brand" href="#">කාම<span class="brand-premium">YAHANA</span></a></div></nav>
 
     <div class="search-section">
         <div class="search-inner">
-            <input type="text" id="search-input" class="search-input" placeholder="Search premium videos here..." onkeyup="searchVideos()">
+            <input type="text" id="search-input" class="search-input" placeholder="Search premium videos..." onkeyup="searchVideos()">
             <i class="fa-solid fa-magnifying-glass"></i>
         </div>
     </div>
 
     <div class="category-bar">
         <div class="container">
-            <button class="category-btn active" onclick="filterVideos('all', this)">All Videos🍆 (33)</button>
-            <button class="category-btn" onclick="filterVideos('srilankan', this)">Sri Lankan🇱🇰 (30+)</button>
-            <button class="category-btn" onclick="filterVideos('outdoor', this)">Outdoor Leek🇱🇰 (13)</button>
-            <button class="category-btn" onclick="filterVideos('country', this)">Any Country🌎 (0)</button>
+            <button class="category-btn active" onclick="filterVideos('all', this)">All Videos</button>
+            <button class="category-btn" onclick="filterVideos('srilankan', this)">Sri Lankan🇱🇰</button>
+            <button class="category-btn" onclick="filterVideos('outdoor', this)">Outdoor🇱🇰</button>
         </div>
     </div>
 
     <div class="container my-4">
-        <div class="ads-banner"></div>
-        <h3 class="mb-4" style="font-weight: 800; letter-spacing: 0.5px; font-size: 20px;"><i class="fa-solid fa-bolt text-warning me-2"></i>AI Recommended Videos</h3>
+        <h3 class="mb-4"><i class="fa-solid fa-bolt text-warning me-2"></i>Recommended</h3>
         <div class="row" id="video-grid"></div>
     </div>
 
@@ -177,240 +113,97 @@
             authDomain: "kamayahana-35572.firebaseapp.com",
             projectId: "kamayahana-35572",
             storageBucket: "kamayahana-35572.firebasestorage.app",
-            messagingSenderId: "432931168383",
-            appId: "1:432931168383:web:2b17621ab16f801adb5f4a",
             databaseURL: "https://kamayahana-35572-default-rtdb.firebaseio.com"
         };
-
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/19fRcgFz3BE41d8gREOzR7mOgl53d6SYyWcY3iyuO4PI/gviz/tq?tqx=out:json`;
 
-        const SPREADSHEET_ID = '19fRcgFz3BE41d8gREOzR7mOgl53d6SYyWcY3iyuO4PI'; 
-        const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
-
-        let allVideoData = []; 
-
-        document.addEventListener("DOMContentLoaded", function() {
-            let percentageText = document.getElementById("loader-percentage");
-            let preloader = document.getElementById("preloader");
-            let ageGate = document.getElementById("age-gate");
-            let count = 0;
-            let counterInterval = setInterval(() => {
-                count += 5;
-                if (count > 100) count = 100;
-                percentageText.innerText = count + "%";
-                if (count === 100) { clearInterval(counterInterval); }
-            }, 25);
-
+        document.addEventListener("DOMContentLoaded", () => {
             fetch(SPREADSHEET_URL)
                 .then(res => res.text())
                 .then(data => {
                     const jsonData = JSON.parse(data.substring(47, data.length - 2));
-                    allVideoData = jsonData.table.rows;
-                    renderVideos(allVideoData);
-                    
-                    preloader.style.opacity = "0";
-                    setTimeout(() => { preloader.style.display = "none"; ageGate.style.display = "flex"; }, 500);
-                    setTimeout(startLiveNotifications, 5000);
+                    renderVideos(jsonData.table.rows);
+                    document.getElementById("preloader").style.display = "none";
+                    document.getElementById("age-gate").style.display = "flex";
                 });
         });
 
-        // 🛠️ FIX: playmogo.com ඇතුළු ඕනෑම DoodStream Alternative Domain එකකින් ID එක නිවැරදිව වෙන් කරගන්නා ලෙස Regex එක වෙනස් කලා.
-        function getDoodStreamThumbnail(videoUrl) {
-            let thumb = "https://via.placeholder.com/640x360/0f0f17/ffaa00?text=Premium+Video"; 
+        function getThumbnail(videoUrl, sheetThumb) {
+            if (sheetThumb && sheetThumb.trim() !== "") return sheetThumb;
             let doodIdMatch = videoUrl.match(/\/(?:d|e)\/([a-zA-Z0-9]+)/);
-            
-            if (doodIdMatch && doodIdMatch[1]) {
-                let videoId = doodIdMatch[1];
-                thumb = `https://img.doodcdn.co/snaps/${videoId}.jpg`;
-            }
-            return thumb;
+            return doodIdMatch ? `https://img.doodcdn.co/snaps/${doodIdMatch[1]}.jpg` : "https://via.placeholder.com/640x360";
         }
 
         function renderVideos(rows) {
-    let gridHtml = '';
-    rows.forEach((row, index) => {
-        const title = row.c[0] ? row.c[0].v : 'Untitled Premium Video';
-        const link = row.c[1] ? row.c[1].v : '#';
-        
-        // මෙතනදී category එක split කරලා classes ටික ගන්නවා
-        const rawCategory = row.c[2] ? row.c[2].v.toLowerCase() : 'all';
-        const categoryArray = rawCategory.split(',').map(c => c.trim());
-        const categoryClasses = categoryArray.join(' ');
-        
-        const duration = row.c[3] ? row.c[3].v : 'HD';
-        const thumb = getDoodStreamThumbnail(link);
-        const videoId = "card_" + index; 
-        
-        // මෙතන "${categoryClasses}" ලෙස වෙනස් කළා
-        gridHtml += `
-            <div class="col-lg-4 col-md-6 video-item ${categoryClasses}">
-                <div class="video-card" id="card-${videoId}">
-                    <div class="video-container">
-                        <div class="badge-hd"><i class="fa-solid fa-bolt me-1"></i>PREMIUM HD</div>
-                        <div class="badge-time">${duration}</div>
-                        <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
-                            <div class="play-btn"><i class="fa-solid fa-play"></i></div>
-                        </div>
-                        <iframe id="player-${index}" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
-                    </div>
-                    <div class="video-info">
-                        <div class="video-title">${title}</div>
-                        <div class="video-meta"><i class="fa-solid fa-eye me-1"></i><span class="v-count">0</span> Views</div>
-                        <div class="video-actions">
-                            <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up me-1"></i><span>0</span></button>
-                            <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down me-1"></i><span>0</span></button>
-                            <button class="action-btn" onclick="shareVideo('${title}', '${link}')"><i class="fa-solid fa-share-nodes"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-    });
-    document.getElementById('video-grid').innerHTML = gridHtml || '<p>No videos found.</p>';
-    syncAllStats(); 
-}
-
+            let gridHtml = '';
+            rows.forEach((row, index) => {
+                const title = row.c[0]?.v || 'Untitled';
+                const link = row.c[1]?.v || '#';
+                const cat = row.c[2]?.v.toLowerCase() || 'all';
+                const duration = row.c[3]?.v || 'HD';
+                const sheetThumb = row.c[4]?.v || "";
+                const thumb = getThumbnail(link, sheetThumb);
+                const videoId = "card_" + index;
                 
-
-        function playVideo(videoUrl, playerId, thumbId, videoId) {
-            document.getElementById(playerId).src = videoUrl;
-            document.getElementById(thumbId).style.opacity = '0';
-            setTimeout(() => { document.getElementById(thumbId).style.display = 'none'; }, 300);
-
-            database.ref('v_stats/' + videoId + '/views').transaction((currentViews) => {
-                return (currentViews || 0) + 1;
+                gridHtml += `<div class="col-lg-4 col-md-6 video-item ${cat}">
+                    <div class="video-card" id="card-${videoId}">
+                        <div class="video-container">
+                            <div class="thumb-overlay" id="thumb-${index}" style="background-image: url('${thumb}');" onclick="playVideo('${link}', 'player-${index}', 'thumb-${index}', '${videoId}')">
+                                <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+                            </div>
+                            <iframe id="player-${index}" src="" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${title}</div>
+                            <div class="video-actions">
+                                <button class="action-btn btn-like" onclick="toggleLike('${videoId}', this)"><i class="fa-solid fa-thumbs-up"></i> <span>0</span></button>
+                                <button class="action-btn btn-dislike" onclick="toggleDislike('${videoId}', this)"><i class="fa-solid fa-thumbs-down"></i> <span>0</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
             });
+            document.getElementById('video-grid').innerHTML = gridHtml;
+            syncAllStats();
+        }
+
+        function playVideo(url, pId, tId, vId) {
+            document.getElementById(pId).src = url;
+            document.getElementById(tId).style.display = 'none';
+            database.ref('v_stats/' + vId + '/views').transaction(c => (c || 0) + 1);
         }
 
         function toggleLike(vId, btn) {
-    console.log("Like clicked for ID:", vId); // මේකෙන් බලන්න හරියට ID එක එනවද කියලා
-    
-    // Database reference එකට අනිවාර්යයෙන්ම vId එක යන්න ඕනේ
-    const ref = database.ref('v_stats/' + vId + '/likes');
-    
-    if(btn.classList.contains('active-like')) {
-        btn.classList.remove('active-like');
-        ref.transaction(c => (c || 1) - 1);
-    } else {
-        btn.classList.add('active-like');
-        ref.transaction(c => (c || 0) + 1);
-    }
-}
+            const ref = database.ref('v_stats/' + vId + '/likes');
+            btn.classList.toggle('active-like');
+            ref.transaction(c => btn.classList.contains('active-like') ? (c || 0) + 1 : (c || 1) - 1);
+        }
 
         function toggleDislike(vId, btn) {
-    const ref = database.ref('v_stats/' + vId + '/dislikes');
-    
-    if(btn.classList.contains('active-dislike')) {
-        btn.classList.remove('active-dislike');
-        ref.transaction(c => (c || 1) - 1);
-    } else {
-        btn.classList.add('active-dislike');
-        ref.transaction(c => (c || 0) + 1);
-        
-        // Dislike කරනකොට Like එක ඉවත් කරන්න
-        let lBtn = btn.previousElementSibling;
-        if(lBtn.classList.contains('active-like')) {
-            lBtn.classList.remove('active-like');
-            database.ref('v_stats/' + vId + '/likes').transaction(c => (c || 1) - 1);
+            const ref = database.ref('v_stats/' + vId + '/dislikes');
+            btn.classList.toggle('active-dislike');
+            ref.transaction(c => btn.classList.contains('active-dislike') ? (c || 0) + 1 : (c || 1) - 1);
         }
-    }
-}
-        function searchVideos() {
-            let query = document.getElementById('search-input').value.toLowerCase();
-            let items = document.querySelectorAll('.video-item');
-            items.forEach(item => {
-                let title = item.querySelector('.video-title').innerText.toLowerCase();
-                item.style.display = title.includes(query) ? 'block' : 'none';
+
+        function syncAllStats() {
+            database.ref('v_stats').on('value', (snap) => {
+                snap.forEach((child) => {
+                    const card = document.getElementById(`card-${child.key}`);
+                    if (card) {
+                        card.querySelector('.btn-like span').innerText = child.val().likes || 0;
+                        card.querySelector('.btn-dislike span').innerText = child.val().dislikes || 0;
+                    }
+                });
             });
         }
-
-        function shareVideo(title, url) {
-    // ඔබේ වෙබ් අඩවියේ සැබෑ URL එක මෙතැනට ඇතුළත් කරන්න
-    const mySiteUrl = window.location.href.split('?')[0] + "?video=" + encodeURIComponent(title);
-    
-    if (navigator.share) {
-        navigator.share({
-            title: title,
-            text: "මේ වීඩියෝ එක බලන්න: " + title,
-            url: mySiteUrl // මෙතැනට දැන් ශෙයාර් වන්නේ ඔබේ අඩවියේ ලින්ක් එකයි
-        }).catch(console.error);
-    } else {
-        // clipboard එකට පිටපත් කිරීම සඳහා ලින්ක් එක ලබාදීම
-        const dummy = document.createElement("textarea");
-        document.body.appendChild(dummy);
-        dummy.value = mySiteUrl;
-        dummy.select();
-        document.execCommand("copy");
-        document.body.removeChild(dummy);
-        alert("ලින්ක් එක කොපි වුණා: " + mySiteUrl);
-    }
-}
-
-
-        function filterVideos(category, buttonElement) {
-    let buttons = document.querySelectorAll('.category-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    buttonElement.classList.add('active');
-
-    let items = document.querySelectorAll('.video-item');
-    items.forEach(item => {
-        if (category === 'all') { 
-            item.style.display = 'block'; 
-        } else {
-            // item එකට අදාළ class එක තියෙනවද කියලා බලනවා
-            item.style.display = item.classList.contains(category) ? 'block' : 'none';
-        }
-    });
-    document.getElementById('search-input').value = ''; 
-}
-
-        // Age Gate logic
-        function enterSite() {
-            let ageGate = document.getElementById("age-gate");
-            ageGate.style.opacity = "0";
-            setTimeout(() => { ageGate.style.display = "none"; }, 400);
-        }
+        
+        function enterSite() { document.getElementById("age-gate").style.display = "none"; }
         function exitSite() { window.location.href = "https://www.google.com"; }
-
-        function startLiveNotifications() {
-            const locations = ['Colombo', 'Kandy', 'Galle', 'Gampaha', 'Negombo', 'Kurunegala', 'Jaffna', 'Matara', 'Kalutara'];
-            const actions = ['unlocked Premium Mode!', 'is watching Live right now.', 'liked a Sri Lankan Leaked video.', 'downloaded full HD pack.'];
-            const toast = document.getElementById('notification-toast');
-            const toastText = document.getElementById('notification-text');
-
-            setInterval(() => {
-                let randomLoc = locations[Math.floor(Math.random() * locations.length)];
-                let randomAct = actions[Math.floor(Math.random() * actions.length)];
-                let randomUsers = Math.floor(Math.random() * 150) + 200;
-
-                if(Math.random() > 0.5) {
-                    toastText.innerHTML = `Someone from <b class="text-warning">${randomLoc}</b> ${randomAct}`;
-                } else {
-                    toastText.innerHTML = `<b class="text-info">${randomUsers} users</b> are browsing this section right now.`;
-                }
-
-                toast.style.transform = 'translateY(0%)';
-                setTimeout(() => { toast.style.transform = 'translateY(150%)'; }, 4000);
-            }, 12000); 
+        function filterVideos(cat, btn) {
+            document.querySelectorAll('.video-item').forEach(i => i.style.display = (cat === 'all' || i.classList.contains(cat)) ? 'block' : 'none');
         }
-        function syncAllStats() {
-    database.ref('v_stats').on('value', (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-            const vId = childSnapshot.key; // මේක තමයි database එකේ තියෙන ID එක
-            const data = childSnapshot.val();
-            
-            const card = document.getElementById(`card-${vId}`);
-            if (card) {
-                card.querySelector('.v-count').innerText = data.views || 0;
-                card.querySelector('.btn-like span').innerText = data.likes || 0;
-                card.querySelector('.btn-dislike span').innerText = data.dislikes || 0;
-            }
-        });
-    });
-}
     </script>
-
 </body>
 </html>
-
-Menna me code Eka mata sheet eken thumbnail Eka change karanna puluwan widiyata hdnn
